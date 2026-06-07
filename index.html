@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@popzzi | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #050507;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrollbars from bouncing stars */
+            position: relative;
+        }
+
+        /* Ambient background image setup */
+        .background-katana {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1615111784767-4d7c413f120d?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+            opacity: 0.2;
+        }
+
+        /* Scanline Overlay Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+            z-index: 5;
+            background-size: 100% 3px;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Falling Snow/Stars Animation */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(105vh) translateX(20px); opacity: 0; }
+        }
+
+        /* Outer wrapper holding the profile elements */
+        .profile-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 20px;
+        }
+
+        /* Screen-wide Orbiting/Bouncing Neon Stars - FIXED Z-INDEX */
+        .orbit-star {
+            position: fixed; 
+            font-size: 1rem;
+            pointer-events: none;
+            z-index: 9999; /* Card ekatath udin tharu yanna 9999 damma */
+            color: #ffffff;
+            will-change: transform;
+            transition: color 0.15s ease;
+        }
+
+        /* Profile Card - Box elements removed, background glow added */
+        .profile-container {
+            background: transparent;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 1.2s ease-out;
+            z-index: 2;
+            padding: 20px;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 95px;
+            height: 95px;
+            margin: 0 auto 15px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 12px;
+            height: 12px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            border: 2px solid #050507;
+            box-shadow: 0 0 8px #00ff66;
+        }
+
+        /* Center Star Emblem */
+        .star-badge {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 5px;
+            animation: spin 8s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+        }
+
+        .sparkle-text-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sparkle-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://assets.guns.lol/sparkle_white.gif');
+            background-size: cover;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.9;
+        }
+
+        .bio {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Music Player Widget - Frameless minimalist design */
+        .music-player {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+            max-width: 280px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        .music-icon {
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .track-info {
+            text-align: left;
+        }
+
+        .track-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .track-artist {
+            font-size: 0.7rem;
+            color: #999999;
+        }
+
+        /* Sleek SINGLE ROW Horizontal Layout for 8 Icons */
+        .links-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            max-width: 100%;
+            margin: 10px auto 0 auto;
+            padding: 10px;
+        }
+
+        /* Wrapper to manage Tooltip Positioning */
+        .link-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .link-card {
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 46px;
+            height: 46px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .link-card i {
+            font-size: 1.25rem;
+            color: #ffffff;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px var(--hover-glow, rgba(255, 255, 255, 0.4));
+            border-color: var(--hover-glow, rgba(255, 255, 255, 0.4));
+        }
+
+        .link-card:hover i {
+            filter: drop-shadow(0 0 8px var(--hover-glow, #ffffff));
+        }
+
+        /* Custom Popup Text (Tooltip) Styling */
+        .tooltip-text {
+            visibility: hidden;
+            width: auto;
+            min-width: 75px;
+            background-color: rgba(10, 10, 15, 0.9);
+            color: #fff;
+            text-align: center;
+            border: 1px solid var(--hover-glow, rgba(255, 255, 255, 0.3));
+            border-radius: 6px;
+            padding: 5px 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 8px var(--hover-glow, transparent);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* Tooltip Arrow */
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(10, 10, 15, 0.9) transparent transparent transparent;
+        }
+
+        /* Show Tooltip on Hover */
+        .link-wrapper:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Mobile View Tweaks */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            .links-container {
+                gap: 10px;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 15px 5px;
+                max-width: 92vw;
+                -webkit-overflow-scrolling: touch;
+            }
+            .links-container::-webkit-scrollbar {
+                display: none;
+            }
+            .links-container {
+                -ms-overflow-style: none;  
+                scrollbar-width: none;  
+            }
+            .link-card {
+                width: 42px;
+                height: 42px;
+                flex-shrink: 0;
+            }
+            .link-card i {
+                font-size: 1.1rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient background image setup -->
+    <div class="background-katana"></div>
+
+    <!-- Floating Stars/Snow Container -->
+    <div class="snow-container" id="snow"></div>
+
+    <!-- Free Roaming Stars spawned via Javascript -->
+    <div id="star-container"></div>
+
+    <!-- Outer Profile Wrapper -->
+    <div class="profile-wrapper">
+        <!-- Main Content Area -->
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="avatar-wrapper">
+                <img src="https://r2.guns.lol/adbe91bf-b56e-47d8-a855-cc3059f32215.gif" alt="popzzi" class="avatar">
+                <div class="status-dot"></div>
+            </div>
+
+            <!-- Central Star Badge -->
+            <div>
+                <i class="fa-regular fa-star star-badge"></i>
+            </div>
+
+            <!-- Sparkle Heading Effect Section -->
+            <div class="sparkle-text-container">
+                <h1>popzzi</h1>
+                <div class="sparkle-overlay"></div>
+            </div>
+            
+            <p class="bio">Digital Creator | Networking & Tech Enthusiast</p>
+
+            <!-- Frameless Mini Music Player -->
+            <div class="music-player">
+                <div class="music-icon">
+                    <i class="fa-solid fa-compact-disc fa-spin" style="animation-duration: 4s;"></i>
+                </div>
+                <div class="track-info">
+                    <div class="track-title">Night Drive</div>
+                    <div class="track-artist">Lofi Geek</div>
+                </div>
+            </div>
+
+            <!-- Social Links Section -->
+            <div class="links-container">
+                <!-- Epic Games -->
+                <div class="link-wrapper" style="--hover-glow: #313131;">
+                    <span class="tooltip-text">Epic Games</span>
+                    <a href="https://epicgames.com" target="_blank" class="link-card">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </a>
+                </div>
+
+                <!-- Reddit -->
+                <div class="link-wrapper" style="--hover-glow: #ff4500;">
+                    <span class="tooltip-text">Reddit</span>
+                    <a href="https://reddit.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-reddit-alien"></i>
+                    </a>
+                </div>
+
+                <!-- Roblox -->
+                <div class="link-wrapper" style="--hover-glow: #ff3333;">
+                    <span class="tooltip-text">Roblox</span>
+                    <a href="https://roblox.com" target="_blank" class="link-card">
+                        <i class="fa-solid fa-cube"></i>
+                    </a>
+                </div>
+
+                <!-- Spotify -->
+                <div class="link-wrapper" style="--hover-glow: #1DB954;">
+                    <span class="tooltip-text">Spotify</span>
+                    <a href="https://spotify.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-spotify"></i>
+                    </a>
+                </div>
+
+                <!-- Steam -->
+                <div class="link-wrapper" style="--hover-glow: #00adef;">
+                    <span class="tooltip-text">Steam</span>
+                    <a href="https://store.steampowered.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-steam"></i>
+                    </a>
+                </div>
+
+                <!-- TikTok -->
+                <div class="link-wrapper" style="--hover-glow: #00f2fe;">
+                    <span class="tooltip-text">TikTok</span>
+                    <a href="https://tiktok.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+
+                <!-- Xbox -->
+                <div class="link-wrapper" style="--hover-glow: #107c10;">
+                    <span class="tooltip-text">Xbox</span>
+                    <a href="https://xbox.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-xbox"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube -->
+                <div class="link-wrapper" style="--hover-glow: #ff0000;">
+                    <span class="tooltip-text">YouTube</span>
+                    <a href="https://youtube.com" target="_blank" class="link-card">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic Setup JavaScript -->
+    <script>
+        /* 1. Ambient Background Micro-Sparks Setup */
+        const snowContainer = document.getElementById('snow');
+        const flakeCount = 35;
+
+        for (let i = 0; i < flakeCount; i++) {
+            const flake = document.createElement('div');
+            flake.classList.add('snowflake');
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
+            flake.style.animationDelay = Math.random() * 5 + 's';
+            flake.style.width = flake.style.height = (Math.random() * 2.5 + 1) + 'px';
+            snowContainer.appendChild(flake);
+        }
+
+        /* 2. Title Auto-Typing & Erasing Animation Logic Loop - FIXED LOCATION BUG */
+        const titleText = "@popzzi | Portfolio";
+        let currentIdx = 0;
+        let isDeleting = false;
+        let typingSpeed = 220; 
+
+        function animateTitleLoop() {
+            // Index eka length ekata samaana wenakan wetharak title text ekak gannawa
+            if (!isDeleting && currentIdx <= titleText.length) {
+                document.title = titleText.substring(0, currentIdx) || " ";
+                currentIdx++;
+                typingSpeed = 200; 
+            } else if (isDeleting && currentIdx >= 0) {
+                document.title = titleText.substring(0, currentIdx) || " ";
+                currentIdx--;
+                typingSpeed = 100; 
+            }
+
+            // Index eka length ekata wada wadi wenna nodi methanin thada kalaa (Fix: PC File location bug)
+            if (currentIdx > titleText.length) {
+                isDeleting = true;
+                currentIdx = titleText.length; 
+                typingSpeed = 2500; // Pause at full string completion
+            } else if (currentIdx < 0) {
+                isDeleting = false;
+                currentIdx = 0;
+                typingSpeed = 800; // Brief pause before starting over
+            }
+
+            setTimeout(animateTitleLoop, typingSpeed);
+        }
+        // Fire up title animation loop
+        animateTitleLoop();
+
+
+        /* 3. Screen-Wide Bouncing Multi-Color Neon Stars Setup */
+        const starContainer = document.getElementById('star-container');
+        const neonColors = [
+            '#00f2fe', '#00ff66', '#ff007f', '#ff00ff', 
+            '#ffff00', '#00ffff', '#ff3333', '#9d4edd'
+        ];
+        const activeStars = [];
+        const totalFreeStars = 5;
+
+        // Instantiate individual star entities
+        for(let i=0; i < totalFreeStars; i++) {
+            const starEl = document.createElement('i');
+            starEl.className = "fa-solid fa-star orbit-star";
+            starContainer.appendChild(starEl);
+
+            // Generate physics settings boundaries
+            activeStars.push({
+                element: starEl,
+                x: Math.random() * (window.innerWidth - 30),
+                y: Math.random() * (window.innerHeight - 30),
+                dx: (Math.random() * 3 + 1.5) * (Math.random() < 0.5 ? 1 : -1),
+                dy: (Math.random() * 3 + 1.5) * (Math.random() < 0.5 ? 1 : -1),
+                size: 16
+            });
+        }
+
+        function updateStarsPhysicsAnimation() {
+            const wWidth = window.innerWidth;
+            const wHeight = window.innerHeight;
+
+            activeStars.forEach(star => {
+                star.x += star.dx;
+                star.y += star.dy;
+
+                let hitWall = false;
+
+                // X Axis Bounce
+                if (star.x <= 0) {
+                    star.x = 0;
+                    star.dx = -star.dx;
+                    hitWall = true;
+                } else if (star.x >= wWidth - star.size) {
+                    star.x = wWidth - star.size;
+                    star.dx = -star.dx;
+                    hitWall = true;
+                }
+
+                // Y Axis Bounce
+                if (star.y <= 0) {
+                    star.y = 0;
+                    star.dy = -star.dy;
+                    hitWall = true;
+                } else if (star.y >= wHeight - star.size) {
+                    star.y = wHeight - star.size;
+                    star.dy = -star.dy;
+                    hitWall = true;
+                }
+
+                // If bounce triggers against outer borders, shift color filters seamlessly
+                if (hitWall) {
+                    const pickedColor = neonColors[Math.floor(Math.random() * neonColors.length)];
+                    star.element.style.color = pickedColor;
+                    star.element.style.filter = `drop-shadow(0 0 10px ${pickedColor}) drop-shadow(0 0 20px ${pickedColor})`;
+                }
+
+                // Push location tracking mutations
+                star.element.style.transform = `translate3d(${star.x}px, ${star.y}px, 0)`;
+            });
+
+            requestAnimationFrame(updateStarsPhysicsAnimation);
+        }
+        
+        // Fire physics calculations loop
+        updateStarsPhysicsAnimation();
+
+        // Handle viewport adjustments dynamically
+        window.addEventListener('resize', () => {
+            activeStars.forEach(star => {
+                if (star.x > window.innerWidth) star.x = window.innerWidth - star.size;
+                if (star.y > window.innerHeight) star.y = window.innerHeight - star.size;
+            });
+        });
+    </script>
+</body>
+</html>
