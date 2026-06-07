@@ -24,6 +24,37 @@
             position: relative;
         }
 
+        /* ──── CLICK TO ENTER OVERLAY ──── */
+        #enter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050507;
+            z-index: 999999; /* Always on top initially */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .enter-text {
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            animation: pulse 2s infinite ease-in-out;
+            font-weight: 300;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+        }
+
         /* Ambient background image setup */
         .background-katana {
             position: fixed;
@@ -34,18 +65,16 @@
             background-image: url('https://images.unsplash.com/photo-1615111784767-4d7c413f120d?q=80&w=1920');
             background-size: cover;
             background-position: center;
-            z-index: -3;
+            z-index: 1; /* Lowest layout layer */
             opacity: 0.2;
         }
 
         /* Scanline Overlay Effect */
-        body::before {
-            content: " ";
-            display: block;
+        .scanlines {
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
-            z-index: 5;
+            z-index: 2; /* Below stars and card container */
             background-size: 100% 3px;
             pointer-events: none;
             opacity: 0.4;
@@ -58,7 +87,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 1000000; /* overlay එකටත් උඩින් පෙනෙන්න අගය වැඩි කරන ලදි */
             pointer-events: none;
         }
 
@@ -79,7 +108,7 @@
             100% { transform: translateY(105vh) translateX(20px); opacity: 0; }
         }
 
-        /* Outer wrapper holding the profile elements */
+        /* Profile Card Container Layout Layer */
         .profile-wrapper {
             position: relative;
             width: 100%;
@@ -88,26 +117,36 @@
             justify-content: center;
             align-items: center;
             margin: 40px 20px;
+            z-index: 10; /* Keeps profile card fully functional and clickable */
+            opacity: 0; /* Hidden initially, fades in after click */
+            transform: translateY(20px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
         }
 
-        /* Screen-wide Orbiting/Bouncing Neon Stars - FIXED Z-INDEX */
+        /* Class added via JS after enter click */
+        .profile-wrapper.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Screen-wide Orbiting/Bouncing Neon Stars - MAX Z-INDEX OVERLAY */
         .orbit-star {
             position: fixed; 
+            top: 0;
+            left: 0;
             font-size: 1rem;
             pointer-events: none;
-            z-index: 9999; /* Card ekatath udin tharu yanna 9999 damma */
+            z-index: 99999; /* Absolute top layer so they float freely over everything */
             color: #ffffff;
             will-change: transform;
             transition: color 0.15s ease;
         }
 
-        /* Profile Card - Box elements removed, background glow added */
+        /* Profile Card Styles */
         .profile-container {
             background: transparent;
             width: 100%;
             text-align: center;
-            animation: fadeIn 1.2s ease-out;
-            z-index: 2;
             padding: 20px;
             background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
         }
@@ -163,7 +202,6 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
             letter-spacing: 1px;
             position: relative;
-            z-index: 1;
         }
 
         .sparkle-overlay {
@@ -176,7 +214,6 @@
             background-size: cover;
             mix-blend-mode: screen;
             pointer-events: none;
-            z-index: 3;
             opacity: 0.9;
         }
 
@@ -187,7 +224,7 @@
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
         }
 
-        /* Music Player Widget - Frameless minimalist design */
+        /* Music Player Widget */
         .music-player {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -223,7 +260,7 @@
             color: #999999;
         }
 
-        /* Sleek SINGLE ROW Horizontal Layout for 8 Icons */
+        /* Social Links Layout Row */
         .links-container {
             display: flex;
             flex-direction: row;
@@ -235,7 +272,6 @@
             padding: 10px;
         }
 
-        /* Wrapper to manage Tooltip Positioning */
         .link-wrapper {
             position: relative;
             display: inline-block;
@@ -273,7 +309,7 @@
             filter: drop-shadow(0 0 8px var(--hover-glow, #ffffff));
         }
 
-        /* Custom Popup Text (Tooltip) Styling */
+        /* Tooltip Popup Styling */
         .tooltip-text {
             visibility: hidden;
             width: auto;
@@ -299,7 +335,6 @@
             white-space: nowrap;
         }
 
-        /* Tooltip Arrow */
         .tooltip-text::after {
             content: "";
             position: absolute;
@@ -311,14 +346,13 @@
             border-color: rgba(10, 10, 15, 0.9) transparent transparent transparent;
         }
 
-        /* Show Tooltip on Hover */
         .link-wrapper:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Mobile View Tweaks */
+        /* Responsive Mobile Layout Tweaks */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.2rem;
@@ -348,11 +382,6 @@
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -361,8 +390,19 @@
 </head>
 <body>
 
+    <!-- CLICK TO ENTER OVERLAY -->
+    <div id="enter-overlay">
+        <div class="enter-text">[ Click to Enter ]</div>
+    </div>
+
+    <!-- Audio Track Element (Add your audio link in src) -->
+    <audio id="bg-music" src="i.mp3" loop></audio>
+
     <!-- Ambient background image setup -->
     <div class="background-katana"></div>
+
+    <!-- Scanline container -->
+    <div class="scanlines"></div>
 
     <!-- Floating Stars/Snow Container -->
     <div class="snow-container" id="snow"></div>
@@ -371,7 +411,7 @@
     <div id="star-container"></div>
 
     <!-- Outer Profile Wrapper -->
-    <div class="profile-wrapper">
+    <div class="profile-wrapper" id="profile-wrapper">
         <!-- Main Content Area -->
         <div class="profile-container">
             <!-- Profile Header -->
@@ -391,7 +431,7 @@
                 <div class="sparkle-overlay"></div>
             </div>
             
-            <p class="bio">Digital Creator | Networking & Tech Enthusiast</p>
+            <p class="bio">Pixcel play ground | Casual Gamer</p>
 
             <!-- Frameless Mini Music Player -->
             <div class="music-player">
@@ -399,8 +439,8 @@
                     <i class="fa-solid fa-compact-disc fa-spin" style="animation-duration: 4s;"></i>
                 </div>
                 <div class="track-info">
-                    <div class="track-title">Night Drive</div>
-                    <div class="track-artist">Lofi Geek</div>
+                    <div class="track-title">i like the way you kiss me</div>
+                    <div class="track-artist">Artemas</div>
                 </div>
             </div>
 
@@ -475,6 +515,30 @@
 
     <!-- Logic Setup JavaScript -->
     <script>
+        /* ──── ENTER SCREEN LOGIC ──── */
+        const enterOverlay = document.getElementById('enter-overlay');
+        const profileWrapper = document.getElementById('profile-wrapper');
+        const bgMusic = document.getElementById('bg-music');
+
+        enterOverlay.addEventListener('click', () => {
+            // Fade out overlay screen
+            enterOverlay.style.opacity = '0';
+            enterOverlay.style.pointerEvents = 'none';
+            
+            // Fade in profile content
+            profileWrapper.classList.add('show');
+            
+            // Play audio track safely
+            if(bgMusic.src && !bgMusic.src.includes('YOUR_MUSIC_FILE_URL_HERE')) {
+                bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
+            }
+
+            setTimeout(() => {
+                enterOverlay.style.display = 'none';
+            }, 1000);
+        });
+
+
         /* 1. Ambient Background Micro-Sparks Setup */
         const snowContainer = document.getElementById('snow');
         const flakeCount = 35;
@@ -489,14 +553,13 @@
             snowContainer.appendChild(flake);
         }
 
-        /* 2. Title Auto-Typing & Erasing Animation Logic Loop - FIXED LOCATION BUG */
+        /* 2. Title Auto-Typing & Erasing Animation Logic Loop */
         const titleText = "@popzzi | Portfolio";
         let currentIdx = 0;
         let isDeleting = false;
         let typingSpeed = 220; 
 
         function animateTitleLoop() {
-            // Index eka length ekata samaana wenakan wetharak title text ekak gannawa
             if (!isDeleting && currentIdx <= titleText.length) {
                 document.title = titleText.substring(0, currentIdx) || " ";
                 currentIdx++;
@@ -507,20 +570,18 @@
                 typingSpeed = 100; 
             }
 
-            // Index eka length ekata wada wadi wenna nodi methanin thada kalaa (Fix: PC File location bug)
             if (currentIdx > titleText.length) {
                 isDeleting = true;
                 currentIdx = titleText.length; 
-                typingSpeed = 2500; // Pause at full string completion
+                typingSpeed = 2500; 
             } else if (currentIdx < 0) {
                 isDeleting = false;
                 currentIdx = 0;
-                typingSpeed = 800; // Brief pause before starting over
+                typingSpeed = 800; 
             }
 
             setTimeout(animateTitleLoop, typingSpeed);
         }
-        // Fire up title animation loop
         animateTitleLoop();
 
 
@@ -533,13 +594,11 @@
         const activeStars = [];
         const totalFreeStars = 5;
 
-        // Instantiate individual star entities
         for(let i=0; i < totalFreeStars; i++) {
             const starEl = document.createElement('i');
             starEl.className = "fa-solid fa-star orbit-star";
             starContainer.appendChild(starEl);
 
-            // Generate physics settings boundaries
             activeStars.push({
                 element: starEl,
                 x: Math.random() * (window.innerWidth - 30),
@@ -582,24 +641,20 @@
                     hitWall = true;
                 }
 
-                // If bounce triggers against outer borders, shift color filters seamlessly
                 if (hitWall) {
                     const pickedColor = neonColors[Math.floor(Math.random() * neonColors.length)];
                     star.element.style.color = pickedColor;
                     star.element.style.filter = `drop-shadow(0 0 10px ${pickedColor}) drop-shadow(0 0 20px ${pickedColor})`;
                 }
 
-                // Push location tracking mutations
                 star.element.style.transform = `translate3d(${star.x}px, ${star.y}px, 0)`;
             });
 
             requestAnimationFrame(updateStarsPhysicsAnimation);
         }
         
-        // Fire physics calculations loop
         updateStarsPhysicsAnimation();
 
-        // Handle viewport adjustments dynamically
         window.addEventListener('resize', () => {
             activeStars.forEach(star => {
                 if (star.x > window.innerWidth) star.x = window.innerWidth - star.size;
