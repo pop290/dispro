@@ -87,7 +87,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000000; /* overlay එකටත් උඩින් පෙනෙන්න අගය වැඩි කරන ලදි */
+            z-index: 1000000; 
             pointer-events: none;
         }
 
@@ -112,7 +112,7 @@
         .profile-wrapper {
             position: relative;
             width: 100%;
-            max-width: 550px;
+            max-width: 680px; /* Adjusted to fit the long row comfortably */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -224,20 +224,26 @@
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
         }
 
-        /* Music Player Widget */
+        /* Music Player Widget with Volume Controls */
         .music-player {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(5px);
             border-radius: 30px;
-            padding: 10px 20px;
+            padding: 10px 22px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 35px;
-            max-width: 280px;
+            max-width: 380px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        .player-main-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .music-icon {
@@ -253,6 +259,7 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: #ffffff;
+            white-space: nowrap;
         }
 
         .track-artist {
@@ -260,21 +267,92 @@
             color: #999999;
         }
 
-        /* Social Links Layout Row */
+        /* Volume Control Area */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            padding-left: 10px;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .volume-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .volume-btn:hover {
+            color: #ffffff;
+        }
+
+        .volume-slider-wrapper {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+        }
+
+        /* Hover Effect: Show slider when hovering over the container */
+        .volume-container:hover .volume-slider-wrapper {
+            width: 75px;
+            margin-left: 5px;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Social Links Layout Row - MODIFIED FOR SINGLE ROW */
         .links-container {
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            width: 100%;
             max-width: 100%;
             margin: 10px auto 0 auto;
             padding: 10px;
+            flex-wrap: nowrap; /* Prevent icons from breaking into multiple rows */
+            overflow-x: visible; /* Standard display allows tools to be visible */
         }
 
         .link-wrapper {
             position: relative;
             display: inline-block;
+            flex-shrink: 0; /* Prevent icons from squeezing/shrinking */
         }
 
         .link-card {
@@ -352,30 +430,27 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* Responsive Mobile Layout Tweaks */
+        /* Responsive Mobile Layout Tweaks - CLEAN HORIZONTAL SCROLL FOR MOBILE */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.2rem;
             }
             .links-container {
                 gap: 10px;
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding: 15px 5px;
+                overflow-x: auto; /* Enable side-scroll if device is too narrow */
+                justify-content: flex-start; /* Align from start for smoother scrolling */
+                padding: 15px 10px;
                 max-width: 92vw;
                 -webkit-overflow-scrolling: touch;
-            }
-            .links-container::-webkit-scrollbar {
-                display: none;
-            }
-            .links-container {
                 -ms-overflow-style: none;  
                 scrollbar-width: none;  
+            }
+            .links-container::-webkit-scrollbar {
+                display: none; /* Hide messy mobile scrollbars */
             }
             .link-card {
                 width: 42px;
                 height: 42px;
-                flex-shrink: 0;
             }
             .link-card i {
                 font-size: 1.1rem;
@@ -395,7 +470,7 @@
         <div class="enter-text">[ Click to Enter ]</div>
     </div>
 
-    <!-- Audio Track Element (Add your audio link in src) -->
+    <!-- Audio Track Element -->
     <audio id="bg-music" src="i.mp3" loop></audio>
 
     <!-- Ambient background image setup -->
@@ -433,19 +508,47 @@
             
             <p class="bio">Pixcel play ground | Casual Gamer</p>
 
-            <!-- Frameless Mini Music Player -->
+            <!-- Frameless Mini Music Player + Volume Slider -->
             <div class="music-player">
-                <div class="music-icon">
-                    <i class="fa-solid fa-compact-disc fa-spin" style="animation-duration: 4s;"></i>
+                <div class="player-main-content">
+                    <div class="music-icon">
+                        <i class="fa-solid fa-compact-disc fa-spin" id="disc-icon" style="animation-duration: 4s;"></i>
+                    </div>
+                    <div class="track-info">
+                        <div class="track-title">i like the way you kiss me</div>
+                        <div class="track-artist">Artemas</div>
+                    </div>
                 </div>
-                <div class="track-info">
-                    <div class="track-title">i like the way you kiss me</div>
-                    <div class="track-artist">Artemas</div>
+                
+                <!-- Volume Control Section -->
+                <div class="volume-container">
+                    <button class="volume-btn" id="volume-toggle" title="Mute/Unmute">
+                        <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+                    </button>
+                    <div class="volume-slider-wrapper">
+                        <input type="range" class="volume-slider" id="volume-control" min="0" max="1" step="0.01" value="1">
+                    </div>
                 </div>
             </div>
 
-            <!-- Social Links Section -->
+            <!-- Social Links Section - ALL IN ONE SINGLE ROW -->
             <div class="links-container">
+                <!-- Discord -->
+                <div class="link-wrapper" style="--hover-glow: #5865F2;">
+                    <span class="tooltip-text">Discord</span>
+                    <a href="https://discord.com/users/popzzi_" target="_blank" class="link-card">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                </div>
+
+                <!-- Instagram -->
+                <div class="link-wrapper" style="--hover-glow: #E1306C;">
+                    <span class="tooltip-text">Instagram</span>
+                    <a href="https://www.instagram.com/sachinthanirmal0" target="_blank" class="link-card">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+
                 <!-- Epic Games -->
                 <div class="link-wrapper" style="--hover-glow: #313131;">
                     <span class="tooltip-text">Epic Games</span>
@@ -457,7 +560,7 @@
                 <!-- Reddit -->
                 <div class="link-wrapper" style="--hover-glow: #ff4500;">
                     <span class="tooltip-text">Reddit</span>
-                    <a href="https://reddit.com" target="_blank" class="link-card">
+                    <a href="https://reddit.com/u/No_Communication1195" target="_blank" class="link-card">
                         <i class="fa-brands fa-reddit-alien"></i>
                     </a>
                 </div>
@@ -465,7 +568,7 @@
                 <!-- Roblox -->
                 <div class="link-wrapper" style="--hover-glow: #ff3333;">
                     <span class="tooltip-text">Roblox</span>
-                    <a href="https://roblox.com" target="_blank" class="link-card">
+                    <a href="https://www.roblox.com/share?code=1ba598def2a5b645909e196f00ef0101&type=Profile&source=ProfileShare&stamp=1780860618500" target="_blank" class="link-card">
                         <i class="fa-solid fa-cube"></i>
                     </a>
                 </div>
@@ -473,7 +576,7 @@
                 <!-- Spotify -->
                 <div class="link-wrapper" style="--hover-glow: #1DB954;">
                     <span class="tooltip-text">Spotify</span>
-                    <a href="https://spotify.com" target="_blank" class="link-card">
+                    <a href="https://open.spotify.com/user/31aeecrufr244az2ieomo7jijf3y?si=88fa07ca4d1340ac" target="_blank" class="link-card">
                         <i class="fa-brands fa-spotify"></i>
                     </a>
                 </div>
@@ -481,7 +584,7 @@
                 <!-- Steam -->
                 <div class="link-wrapper" style="--hover-glow: #00adef;">
                     <span class="tooltip-text">Steam</span>
-                    <a href="https://store.steampowered.com" target="_blank" class="link-card">
+                    <a href="https://steamcommunity.com/profiles/76561199682107905/" target="_blank" class="link-card">
                         <i class="fa-brands fa-steam"></i>
                     </a>
                 </div>
@@ -489,15 +592,23 @@
                 <!-- TikTok -->
                 <div class="link-wrapper" style="--hover-glow: #00f2fe;">
                     <span class="tooltip-text">TikTok</span>
-                    <a href="https://tiktok.com" target="_blank" class="link-card">
+                    <a href="https://www.tiktok.com/@popzzi__" target="_blank" class="link-card">
                         <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+
+                <!-- Twitch -->
+                <div class="link-wrapper" style="--hover-glow: #9146FF;">
+                    <span class="tooltip-text">Twitch</span>
+                    <a href="https://www.twitch.tv/popzzi__" target="_blank" class="link-card">
+                        <i class="fa-brands fa-twitch"></i>
                     </a>
                 </div>
 
                 <!-- Xbox -->
                 <div class="link-wrapper" style="--hover-glow: #107c10;">
                     <span class="tooltip-text">Xbox</span>
-                    <a href="https://xbox.com" target="_blank" class="link-card">
+                    <a href="https://www.xbox.com/en-LK/play/user/popzzi0" target="_blank" class="link-card">
                         <i class="fa-brands fa-xbox"></i>
                     </a>
                 </div>
@@ -507,6 +618,14 @@
                     <span class="tooltip-text">YouTube</span>
                     <a href="https://youtube.com" target="_blank" class="link-card">
                         <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+
+                <!-- GitHub -->
+                <div class="link-wrapper" style="--hover-glow: #fafafa;">
+                    <span class="tooltip-text">GitHub</span>
+                    <a href="https://github.com/popzzi290" target="_blank" class="link-card">
+                        <i class="fa-brands fa-github"></i>
                     </a>
                 </div>
             </div>
@@ -519,16 +638,13 @@
         const enterOverlay = document.getElementById('enter-overlay');
         const profileWrapper = document.getElementById('profile-wrapper');
         const bgMusic = document.getElementById('bg-music');
+        const discIcon = document.getElementById('disc-icon');
 
         enterOverlay.addEventListener('click', () => {
-            // Fade out overlay screen
             enterOverlay.style.opacity = '0';
             enterOverlay.style.pointerEvents = 'none';
-            
-            // Fade in profile content
             profileWrapper.classList.add('show');
             
-            // Play audio track safely
             if(bgMusic.src && !bgMusic.src.includes('YOUR_MUSIC_FILE_URL_HERE')) {
                 bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
             }
@@ -538,8 +654,52 @@
             }, 1000);
         });
 
+        /* ──── VOLUME & MUTE CONTROL LOGIC ──── */
+        const volumeControl = document.getElementById('volume-control');
+        const volumeToggle = document.getElementById('volume-toggle');
+        const volumeIcon = document.getElementById('volume-icon');
+        let previousVolume = 1;
 
-        /* 1. Ambient Background Micro-Sparks Setup */
+        bgMusic.volume = volumeControl.value;
+
+        volumeControl.addEventListener('input', (e) => {
+            const currentVolume = e.target.value;
+            bgMusic.volume = currentVolume;
+            updateVolumeIcon(currentVolume);
+            
+            if (currentVolume > 0) {
+                previousVolume = currentVolume;
+            }
+        });
+
+        volumeToggle.addEventListener('click', () => {
+            if (bgMusic.volume > 0) {
+                previousVolume = bgMusic.volume;
+                bgMusic.volume = 0;
+                volumeControl.value = 0;
+                updateVolumeIcon(0);
+            } else {
+                bgMusic.volume = previousVolume;
+                volumeControl.value = previousVolume;
+                updateVolumeIcon(previousVolume);
+            }
+        });
+
+        function updateVolumeIcon(volume) {
+            volumeIcon.className = "fa-solid";
+            if (volume == 0) {
+                volumeIcon.classList.add("fa-volume-xmark");
+                discIcon.style.animationPlayState = "paused";
+            } else if (volume < 0.4) {
+                volumeIcon.classList.add("fa-volume-low");
+                discIcon.style.animationPlayState = "running";
+            } else {
+                volumeIcon.classList.add("fa-volume-high");
+                discIcon.style.animationPlayState = "running";
+            }
+        }
+
+        /* Ambient Background Micro-Sparks Setup */
         const snowContainer = document.getElementById('snow');
         const flakeCount = 35;
 
@@ -553,7 +713,7 @@
             snowContainer.appendChild(flake);
         }
 
-        /* 2. Title Auto-Typing & Erasing Animation Logic Loop */
+        /* Title Auto-Typing Loop */
         const titleText = "@popzzi | Portfolio";
         let currentIdx = 0;
         let isDeleting = false;
@@ -584,8 +744,7 @@
         }
         animateTitleLoop();
 
-
-        /* 3. Screen-Wide Bouncing Multi-Color Neon Stars Setup */
+        /* Free Roaming Neon Stars Setup */
         const starContainer = document.getElementById('star-container');
         const neonColors = [
             '#00f2fe', '#00ff66', '#ff007f', '#ff00ff', 
@@ -619,7 +778,6 @@
 
                 let hitWall = false;
 
-                // X Axis Bounce
                 if (star.x <= 0) {
                     star.x = 0;
                     star.dx = -star.dx;
@@ -630,7 +788,6 @@
                     hitWall = true;
                 }
 
-                // Y Axis Bounce
                 if (star.y <= 0) {
                     star.y = 0;
                     star.dy = -star.dy;
