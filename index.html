@@ -644,10 +644,9 @@
             enterOverlay.style.opacity = '0';
             enterOverlay.style.pointerEvents = 'none';
             profileWrapper.classList.add('show');
-            
-            if(bgMusic.src && !bgMusic.src.includes('YOUR_MUSIC_FILE_URL_HERE')) {
-                bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
-            }
+    
+    // සින්දුව කෙලින්ම play කරන්න මෙන්න මෙහෙම විතරක් දාන්න:
+            bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
 
             setTimeout(() => {
                 enterOverlay.style.display = 'none';
