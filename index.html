@@ -467,11 +467,11 @@
 
     <!-- CLICK TO ENTER OVERLAY -->
     <div id="enter-overlay">
-        <div class="enter-text"> Click to Enter </div>
+        <div class="enter-text">[ Click to Enter ]</div>
     </div>
 
     <!-- Audio Track Element -->
-    <audio id="bg-music" src="i.mp3" loop preload="auto"></audio>
+    <audio id="bg-music" src="i.mp3" loop></audio>
 
     <!-- Ambient background image setup -->
     <div class="background-katana"></div>
@@ -616,7 +616,7 @@
                 <!-- YouTube -->
                 <div class="link-wrapper" style="--hover-glow: #ff0000;">
                     <span class="tooltip-text">YouTube</span>
-                    <a href="https://youtube.com" target="_blank" class="link-card">
+                    <a href="https://www.youtube.com/@popzzi__" target="_blank" class="link-card">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>
@@ -644,9 +644,10 @@
             enterOverlay.style.opacity = '0';
             enterOverlay.style.pointerEvents = 'none';
             profileWrapper.classList.add('show');
-    
-    // සින්දුව කෙලින්ම play කරන්න මෙන්න මෙහෙම විතරක් දාන්න:
-            bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
+            
+            if(bgMusic.src && !bgMusic.src.includes('YOUR_MUSIC_FILE_URL_HERE')) {
+                bgMusic.play().catch(error => console.log("Audio play blocked: ", error));
+            }
 
             setTimeout(() => {
                 enterOverlay.style.display = 'none';
@@ -713,7 +714,7 @@
         }
 
         /* Title Auto-Typing Loop */
-        const titleText = "@popzzi | Portfolio";
+        const titleText = "@popzzi";
         let currentIdx = 0;
         let isDeleting = false;
         let typingSpeed = 220; 
