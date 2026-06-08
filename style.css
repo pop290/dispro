@@ -1,0 +1,510 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #050507;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden; /* Prevent scrollbars from bouncing stars */
+    position: relative;
+}
+
+/* ──── CLICK TO ENTER OVERLAY ──── */
+#enter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #050507;
+    z-index: 999999; /* Always on top initially */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.enter-text {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    animation: pulse 2s infinite ease-in-out;
+    font-weight: 300;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+}
+
+/* Ambient background image setup */
+.background-katana {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1615111784767-4d7c413f120d?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    z-index: 1; /* Lowest layout layer */
+    opacity: 0.2;
+}
+
+/* Scanline Overlay Effect */
+.scanlines {
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+    z-index: 2; /* Below stars and card container */
+    background-size: 100% 3px;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/* Falling Snow/Stars Animation */
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000000; 
+    pointer-events: none;
+}
+
+.snowflake {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(105vh) translateX(20px); opacity: 0; }
+}
+
+/* Profile Card Container Layout Layer */
+.profile-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 680px; /* Adjusted to fit the long row comfortably */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 20px;
+    z-index: 10; /* Keeps profile card fully functional and clickable */
+    opacity: 0; /* Hidden initially, fades in after click */
+    transform: translateY(20px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+/* Class added via JS after enter click */
+.profile-wrapper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Screen-wide Orbiting/Bouncing Neon Stars - MAX Z-INDEX OVERLAY */
+.orbit-star {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 99999; /* Absolute top layer so they float freely over everything */
+    color: #ffffff;
+    will-change: transform;
+    transition: color 0.15s ease;
+}
+
+/* ──── MOUSE CURSOR PARTICLES ──── */
+.cursor-particle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 999998;
+    font-size: 10px;
+    will-change: transform, opacity;
+    animation: particleFade 0.8s forwards ease-out;
+}
+
+@keyframes particleFade {
+    0% {
+        transform: translate3d(var(--x), var(--y), 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate3d(var(--mx), var(--my), 0) scale(0) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Profile Card Styles */
+.profile-container {
+    background: transparent;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 95px;
+    height: 95px;
+    margin: 0 auto 15px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    background-color: #00ff66;
+    border-radius: 50%;
+    border: 2px solid #050507;
+    box-shadow: 0 0 8px #00ff6 green;
+}
+
+/* Center Star Emblem */
+.star-badge {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 5px;
+    animation: spin 8s linear infinite;
+    display: inline-block;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+.sparkle-text-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.sparkle-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://assets.guns.lol/sparkle_white.gif');
+    background-size: cover;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.bio {
+    color: #cccccc;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Music Player Widget with Volume Controls */
+.music-player {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    border-radius: 30px;
+    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 35px;
+    max-width: 380px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.player-main-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.music-icon {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.track-info {
+    text-align: left;
+}
+
+.track-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.track-artist {
+    font-size: 0.7rem;
+    color: #999999;
+}
+
+/* Volume Control Area */
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.volume-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.volume-btn:hover {
+    color: #ffffff;
+}
+
+.volume-slider-wrapper {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+}
+
+/* Hover Effect: Show slider when hovering over the container */
+.volume-container:hover .volume-slider-wrapper {
+    width: 75px;
+    margin-left: 5px;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    transition: transform 0.1s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Social Links Layout Row - MODIFIED FOR SINGLE ROW */
+.links-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    margin: 10px auto 0 auto;
+    padding: 10px;
+    flex-wrap: nowrap; /* Prevent icons from breaking into multiple rows */
+    overflow-x: visible; /* Standard display allows tools to be visible */
+}
+
+.link-wrapper {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0; /* Prevent icons from squeezing/shrinking */
+}
+
+.link-card {
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 46px;
+    height: 46px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.link-card i {
+    font-size: 1.25rem;
+    color: #ffffff;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+    transition: all 0.3s ease;
+}
+
+.link-card:hover {
+    transform: scale(1.2);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px var(--hover-glow, rgba(255, 255, 255, 0.4));
+    border-color: var(--hover-glow, rgba(255, 255, 255, 0.4));
+}
+
+.link-card:hover i {
+    filter: drop-shadow(0 0 8px var(--hover-glow, #ffffff));
+}
+
+/* Tooltip Popup Styling */
+.tooltip-text {
+    visibility: hidden;
+    width: auto;
+    min-width: 75px;
+    background-color: rgba(10, 10, 15, 0.9);
+    color: #fff;
+    text-align: center;
+    border: 1px solid var(--hover-glow, rgba(255, 255, 255, 0.3));
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 10;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 8px var(--hover-glow, transparent);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(10, 10, 15, 0.9) transparent transparent transparent;
+}
+
+.link-wrapper:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive Mobile Layout Tweaks - CLEAN HORIZONTAL SCROLL FOR MOBILE */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    .links-container {
+        gap: 10px;
+        overflow-x: auto; /* Enable side-scroll if device is too narrow */
+        justify-content: flex-start; /* Align from start for smoother scrolling */
+        padding: 15px 10px;
+        max-width: 92vw;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+    }
+    .links-container::-webkit-scrollbar {
+        display: none; /* Hide messy mobile scrollbars */
+    }
+    .link-card {
+        width: 42px;
+        height: 42px;
+    }
+    .link-card i {
+        font-size: 1.1rem;
+    }
+}
+
+/* සාමාන්‍ය කර්සරය හැංගීම */
+html, body, a, button, #enter-overlay {
+    cursor: none !important;
+}
+
+/* ──── නවීකරණය කරන ලද CUSTOM CURSOR STYLE ──── */
+.custom-cursor {
+    position: fixed;
+    width: 6px;               /* ප්‍රමාණය කුඩා කලා */
+    height: 6px;              /* ප්‍රමාණය කුඩා කලා */
+    background-color: #ffffff; /* මැද තිත සුදු පාටින් */
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%); /* හරියටම මැදට කේන්ද්‍රගත කිරීම */
+    z-index: 9999999;
+    transition: width 0.2s, height 0.2s, background-color 0.2s, box-shadow 0.2s;
+    border: none;              /* කලින් තිබ්බ බෝඩරය ඉවත් කලා */
+    
+    /* වටේ තිබ්බ පාටවල් මැදට ඒකරාශී කර සාදන ලද තද Neon Glow එකක් */
+    box-shadow: 
+        0 0 6px #00f2fe, 
+        0 0 12px #00f2fe, 
+        0 0 22px #00f2fe;
+}
+
+/* Click කළ හැකි තැන් උඩට ගියවිට කර්සරය වෙනස් වන ආකාරය */
+.custom-cursor.hovered {
+    width: 10px;
+    height: 10px;
+    background-color: #00f2fe;
+    box-shadow: 
+        0 0 10px #00f2fe, 
+        0 0 20px #00f2fe, 
+        0 0 35px #00f2fe;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

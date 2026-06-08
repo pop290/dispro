@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@popzzi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <div id="enter-overlay">
+        <div class="enter-text">[ Click to Enter ]</div>
+    </div>
+
+    <audio id="bg-music" src="i.mp3" loop></audio>
+
+    <div class="background-katana"></div>
+
+    <div class="scanlines"></div>
+
+    <div class="snow-container" id="snow"></div>
+
+    <div id="star-container"></div>
+
+    <div class="profile-wrapper" id="profile-wrapper">
+        <div class="profile-container">
+            <div class="avatar-wrapper">
+                <img src="https://r2.guns.lol/adbe91bf-b56e-47d8-a855-cc3059f32215.gif" alt="popzzi" class="avatar">
+                <div class="status-dot"></div>
+            </div>
+
+            <div>
+                <i class="fa-regular fa-star star-badge"></i>
+            </div>
+
+            <div class="sparkle-text-container">
+                <h1>popzzi</h1>
+                <div class="sparkle-overlay"></div>
+            </div>
+            
+            <p class="bio">Pixcel play ground | Casual Gamer</p>
+
+            <div class="music-player">
+                <div class="player-main-content">
+                    <div class="music-icon">
+                        <i class="fa-solid fa-compact-disc fa-spin" id="disc-icon" style="animation-duration: 4s;"></i>
+                    </div>
+                    <div class="track-info">
+                        <div class="track-title">i like the way you kiss me</div>
+                        <div class="track-artist">Artemas</div>
+                    </div>
+                </div>
+                
+                <div class="volume-container">
+                    <button class="volume-btn" id="volume-toggle" title="Mute/Unmute">
+                        <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+                    </button>
+                    <div class="volume-slider-wrapper">
+                        <input type="range" class="volume-slider" id="volume-control" min="0" max="1" step="0.01" value="1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="links-container">
+                <div class="link-wrapper" style="--hover-glow: #5865F2;">
+                    <span class="tooltip-text">Discord</span>
+                    <a href="https://discord.com/users/popzzi_" target="_blank" class="link-card">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #E1306C;">
+                    <span class="tooltip-text">Instagram</span>
+                    <a href="https://www.instagram.com/sachinthanirmal0" target="_blank" class="link-card">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #313131;">
+                    <span class="tooltip-text">Epic Games</span>
+                    <a href="https://epicgames.com" target="_blank" class="link-card">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #ff4500;">
+                    <span class="tooltip-text">Reddit</span>
+                    <a href="https://reddit.com/u/No_Communication1195" target="_blank" class="link-card">
+                        <i class="fa-brands fa-reddit-alien"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #ff3333;">
+                    <span class="tooltip-text">Roblox</span>
+                    <a href="https://www.roblox.com/share?code=1ba598def2a5b645909e196f00ef0101&type=Profile&source=ProfileShare&stamp=1780860618500" target="_blank" class="link-card">
+                        <i class="fa-solid fa-cube"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #1DB954;">
+                    <span class="tooltip-text">Spotify</span>
+                    <a href="https://open.spotify.com/user/31aeecrufr244az2ieomo7jijf3y?si=88fa07ca4d1340ac" target="_blank" class="link-card">
+                        <i class="fa-brands fa-spotify"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #00adef;">
+                    <span class="tooltip-text">Steam</span>
+                    <a href="https://steamcommunity.com/profiles/76561199682107905/" target="_blank" class="link-card">
+                        <i class="fa-brands fa-steam"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #00f2fe;">
+                    <span class="tooltip-text">TikTok</span>
+                    <a href="https://www.tiktok.com/@popzzi__" target="_blank" class="link-card">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #9146FF;">
+                    <span class="tooltip-text">Twitch</span>
+                    <a href="https://www.twitch.tv/popzzi__" target="_blank" class="link-card">
+                        <i class="fa-brands fa-twitch"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #107c10;">
+                    <span class="tooltip-text">Xbox</span>
+                    <a href="https://www.xbox.com/en-LK/play/user/popzzi0" target="_blank" class="link-card">
+                        <i class="fa-brands fa-xbox"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #ff0000;">
+                    <span class="tooltip-text">YouTube</span>
+                    <a href="https://www.youtube.com/@popzzi__" target="_blank" class="link-card">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+
+                <div class="link-wrapper" style="--hover-glow: #fafafa;">
+                    <span class="tooltip-text">GitHub</span>
+                    <a href="https://github.com/popzzi290" target="_blank" class="link-card">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
