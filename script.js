@@ -187,7 +187,6 @@ window.addEventListener('resize', () => {
 const customCursor = document.getElementById('custom-cursor');
 
 window.addEventListener('mousemove', (e) => {
-    // Custom cursor positioned at mouse coordinates
     customCursor.style.left = e.clientX + 'px';
     customCursor.style.top = e.clientY + 'px';
 
@@ -218,9 +217,47 @@ window.addEventListener('mousemove', (e) => {
     }
 });
 
-// Cursor Hover Effects for Links/Buttons
 const interactionTargets = document.querySelectorAll('a, button, #enter-overlay');
 interactionTargets.forEach(target => {
     target.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
     target.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
 });
+
+
+/* ──── 🔗 DISCORD LIVE AVATAR & DECORATION LOGIC ──── */
+const DISCORD_ID = '1150456297922252832'; 
+
+async function fetchDiscordProfile() {
+    try {
+        const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+            const user = data.data.discord_user;
+
+            // 1. Live Avatar (Profile Picture) එක Update කිරීම
+            const avatarHash = user.avatar;
+            let avatarUrl = "";
+            if (avatarHash) {
+                const isGif = avatarHash.startsWith("a_");
+                avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${avatarHash}.${isGif ? 'gif' : 'png'}?size=256`;
+                document.getElementById('discord-avatar').src = avatarUrl;
+            }
+
+            // 2. Live Avatar Decoration (Nitro Effect) එක Update කිරීම
+            if (user.avatar_decoration_data && user.avatar_decoration_data.asset) {
+                const decoHash = user.avatar_decoration_data.asset;
+                const decoUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${decoHash}.png?size=256&passthrough=true`;
+                
+                const decoImg = document.getElementById('discord-decoration');
+                decoImg.src = decoUrl;
+                decoImg.style.display = 'block'; // Effect එක තියෙනවා නම් පෙන්වනවා
+            }
+        }
+    } catch (error) {
+        console.error("Discord live data load කිරීමට නොහැකි විය:", error);
+    }
+}
+
+// Page එක load වෙද්දීම Discord data ටික ඇදලා ගන්නවා
+fetchDiscordProfile();
