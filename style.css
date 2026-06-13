@@ -165,32 +165,52 @@ body {
     background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
 }
 
+/* 🔄 Discord Effect එකට ගැලපෙන්න මම මේ කොටස වෙනස් කළා */
 .avatar-wrapper {
     position: relative;
-    width: 95px;
-    height: 95px;
+    width: 135px;   /* Discord Effect එකට ගැලපෙන සයිස් එක */
+    height: 135px;  /* Discord Effect එකට ගැලපෙන සයිස් එක */
     margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* 🔄 Discord Avatar එක Effect එක ඇතුලට ලස්සනට සෙට් වෙන්න හැදුවා */
 .avatar {
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     border: 1.5px solid rgba(255, 255, 255, 0.4);
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
+    position: absolute;
+    z-index: 1; /* Avatar එක යටින් තියෙන්න */
 }
 
+/* ➕ අලුතින් එකතු කරපු Discord Decoration Layer එක */
+.discord-decoration {
+    position: absolute;
+    width: 135px;
+    height: 135px;
+    top: 0;
+    left: 0;
+    z-index: 2; /* Effect එක Avatar එක උඩින් පෙනෙන්න */
+    pointer-events: none;
+}
+
+/* Status Dot එක Effect එකෙන් වැහෙන්නේ නැති වෙන්න හැදුවා */
 .status-dot {
     position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 12px;
-    height: 12px;
+    bottom: 12px;
+    right: 12px;
+    width: 14px;
+    height: 14px;
     background-color: #00ff66;
     border-radius: 50%;
     border: 2px solid #050507;
-    box-shadow: 0 0 8px #00ff6 green;
+    box-shadow: 0 0 8px #00ff66;
+    z-index: 3; /* හැමදේටම උඩින් තියෙන්න */
 }
 
 /* Center Star Emblem */
