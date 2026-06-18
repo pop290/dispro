@@ -2,20 +2,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
     background-color: #050507;
-    color: #ffffff;
+    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden; /* Prevent scrollbars from bouncing stars */
+    overflow: hidden;
     position: relative;
 }
-
 /* ──── CLICK TO ENTER OVERLAY ──── */
 #enter-overlay {
     position: fixed;
@@ -24,13 +22,13 @@ body {
     width: 100%;
     height: 100%;
     background-color: #050507;
-    z-index: 999999; /* Always on top initially */
+    z-index: 999999;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 1s ease, visibility 1s ease;
+    cursor: pointer !important;
 }
-
 .enter-text {
     font-size: 1.2rem;
     letter-spacing: 4px;
@@ -40,100 +38,86 @@ body {
     font-weight: 300;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
-
 @keyframes pulse {
-    0%, 100% { opacity: 0.3; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); }
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.98);
+    } 50% {
+        opacity: 1;
+        transform: scale(1.02);
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    }
 }
-
-/* Ambient background image setup */
-.background-katana {
+.scanlines {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://images.unsplash.com/photo-1615111784767-4d7c413f120d?q=80&w=1920');
-    background-size: cover;
-    background-position: center;
-    z-index: 1; /* Lowest layout layer */
-    opacity: 0.2;
-}
-
-/* Scanline Overlay Effect */
-.scanlines {
-    position: fixed;
-    top: 0; left: 0; bottom: 0; right: 0;
+    bottom: 0;
+    right: 0;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
-    z-index: 2; /* Below stars and card container */
+    z-index: 2;
     background-size: 100% 3px;
     pointer-events: none;
     opacity: 0.4;
 }
-
-/* Falling Snow/Stars Animation */
 .snow-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000000; 
+    z-index: 1000000;
     pointer-events: none;
 }
 
-.snowflake {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.5;
-    animation: fall linear infinite;
-}
-
-@keyframes fall {
-    0% { transform: translateY(-10px) translateX(0); opacity: 0; }
-    10% { opacity: 0.6; }
-    90% { opacity: 0.4; }
-    100% { transform: translateY(105vh) translateX(20px); opacity: 0; }
-}
-
-/* Profile Card Container Layout Layer */
+/* ──── PROFILE WRAPPER & ENTRANCE ANIMATIONS ──── */
 .profile-wrapper {
     position: relative;
     width: 100%;
-    max-width: 680px; /* Adjusted to fit the long row comfortably */
+    max-width: 680px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 40px 20px;
-    z-index: 10; /* Keeps profile card fully functional and clickable */
-    opacity: 0; /* Hidden initially, fades in after click */
-    transform: translateY(20px);
-    transition: opacity 1.5s ease, transform 1.5s ease;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: visible !important;
 }
-
-/* Class added via JS after enter click */
 .profile-wrapper.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
-/* Screen-wide Orbiting/Bouncing Neon Stars - MAX Z-INDEX OVERLAY */
+/* Staggered Entrance Elements */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.profile-wrapper.show .reveal-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.3s; }
+.delay-3 { transition-delay: 0.5s; }
+.delay-4 { transition-delay: 0.7s; }
+.delay-5 { transition-delay: 0.9s; }
+
 .orbit-star {
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     font-size: 1rem;
     pointer-events: none;
-    z-index: 99999; /* Absolute top layer so they float freely over everything */
-    color: #ffffff;
+    z-index: 1;
+    color: #fff;
     will-change: transform;
     transition: color 0.15s ease;
 }
-
-/* ──── MOUSE CURSOR PARTICLES ──── */
 .cursor-particle {
     position: fixed;
     top: 0;
@@ -144,39 +128,36 @@ body {
     will-change: transform, opacity;
     animation: particleFade 0.8s forwards ease-out;
 }
-
 @keyframes particleFade {
     0% {
         transform: translate3d(var(--x), var(--y), 0) scale(1) rotate(0deg);
         opacity: 1;
-    }
-    100% {
+    } 100% {
         transform: translate3d(var(--mx), var(--my), 0) scale(0) rotate(180deg);
         opacity: 0;
     }
 }
-
-/* Profile Card Styles */
 .profile-container {
     background: transparent;
     width: 100%;
     text-align: center;
     padding: 20px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+    box-shadow: none !important;
+    will-change: transform;
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    outline: 1px solid transparent;
+    overflow: visible !important;
 }
-
-/* 🔄 Discord Effect එකට ගැලපෙන්න මම මේ කොටස වෙනස් කළා */
 .avatar-wrapper {
     position: relative;
-    width: 135px;   /* Discord Effect එකට ගැලපෙන සයිස් එක */
-    height: 135px;  /* Discord Effect එකට ගැලපෙන සයිස් එක */
+    width: 135px;
+    height: 135px;
     margin: 0 auto 15px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-/* 🔄 Discord Avatar එක Effect එක ඇතුලට ලස්සනට සෙට් වෙන්න හැදුවා */
 .avatar {
     width: 100px;
     height: 100px;
@@ -185,80 +166,78 @@ body {
     border: 1.5px solid rgba(255, 255, 255, 0.4);
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.2));
     position: absolute;
-    z-index: 1; /* Avatar එක යටින් තියෙන්න */
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
-
-/* ➕ අලුතින් එකතු කරපු Discord Decoration Layer එක */
+.avatar:hover {
+    transform: scale(1.05);
+}
 .discord-decoration {
     position: absolute;
     width: 135px;
     height: 135px;
     top: 0;
     left: 0;
-    z-index: 2; /* Effect එක Avatar එක උඩින් පෙනෙන්න */
+    z-index: 2;
     pointer-events: none;
 }
-
-/* Status Dot එක Effect එකෙන් වැහෙන්නේ නැති වෙන්න හැදුවා */
 .status-dot {
     position: absolute;
     bottom: 12px;
     right: 12px;
     width: 14px;
     height: 14px;
-    background-color: #00ff66;
+    background-color: #0f6;
     border-radius: 50%;
     border: 2px solid #050507;
-    box-shadow: 0 0 8px #00ff66;
-    z-index: 3; /* හැමදේටම උඩින් තියෙන්න */
+    box-shadow: 0 0 8px #0f6;
+    z-index: 3;
 }
-
-/* Center Star Emblem */
 .star-badge {
     font-size: 1.8rem;
-    color: #ffffff;
+    color: #fff;
     margin-bottom: 5px;
     animation: spin 8s linear infinite;
     display: inline-block;
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
-
 .sparkle-text-container {
     position: relative;
     display: inline-block;
     margin-bottom: 8px;
 }
-
 h1 {
     font-size: 2.6rem;
     font-weight: 700;
-    color: #ffffff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    color: #fff;
     letter-spacing: 1px;
     position: relative;
-}
-
-.sparkle-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    display: inline-block;
+    padding: 5px 15px;
+    
+    /* GIF එක background එකට දැමීම */
     background-image: url('https://assets.guns.lol/sparkle_white.gif');
     background-size: cover;
-    mix-blend-mode: screen;
-    pointer-events: none;
-    opacity: 0.9;
+    background-position: center;
+    border-radius: 8px; /* අවශ්‍ය නම් වටකුරු කිරීමට */
+    
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    animation: shimmer 4s infinite ease-in-out;
 }
-
+@keyframes shimmer {
+    0%, 100% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    } 50% {
+        text-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 45px rgba(255, 255, 255, 0.4);
+        transform: scale(1.01);
+    }
+}
 .bio {
-    color: #cccccc;
+    color: #ccc;
     font-size: 0.9rem;
     margin-bottom: 25px;
     text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
-
-/* Music Player Widget with Volume Controls */
 .music-player {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -269,39 +248,43 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 35px;
+    margin-bottom: 10px;
     max-width: 380px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 20;
+    animation: breathe 5s infinite ease-in-out;
+    transition: transform 0.2s ease;
 }
-
+@keyframes breathe {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); }
+    50% { transform: scale(1.02); box-shadow: 0 0 25px rgba(255, 255, 255, 0.05); }
+}
+.music-player:active {
+    transform: scale(0.96);
+}
 .player-main-content {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-
 .music-icon {
-    color: #ffffff;
+    color: #fff;
     font-size: 1rem;
 }
-
 .track-info {
     text-align: left;
 }
-
 .track-title {
     font-size: 0.8rem;
     font-weight: 600;
-    color: #ffffff;
+    color: #fff;
     white-space: nowrap;
 }
-
 .track-artist {
     font-size: 0.7rem;
-    color: #999999;
+    color: #999;
 }
-
-/* Volume Control Area */
 .volume-container {
     display: flex;
     align-items: center;
@@ -309,24 +292,27 @@ h1 {
     position: relative;
     padding-left: 10px;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: auto !important;
 }
-
 .volume-btn {
     background: none;
     border: none;
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.9rem;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.1s ease;
     padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: auto !important;
+    cursor: pointer !important;
 }
-
 .volume-btn:hover {
-    color: #ffffff;
+    color: #fff;
 }
-
+.volume-btn:active {
+    transform: scale(0.85);
+}
 .volume-slider-wrapper {
     width: 0;
     overflow: hidden;
@@ -334,13 +320,10 @@ h1 {
     display: flex;
     align-items: center;
 }
-
-/* Hover Effect: Show slider when hovering over the container */
 .volume-container:hover .volume-slider-wrapper {
     width: 75px;
     margin-left: 5px;
 }
-
 .volume-slider {
     -webkit-appearance: none;
     width: 100%;
@@ -348,24 +331,19 @@ h1 {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     outline: none;
+    pointer-events: auto !important;
+    cursor: pointer !important;
 }
-
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
     transition: transform 0.1s;
 }
-
-.volume-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-}
-
-/* Social Links Layout Row - MODIFIED FOR SINGLE ROW */
 .links-container {
     display: flex;
     flex-direction: row;
@@ -374,21 +352,30 @@ h1 {
     gap: 12px;
     width: 100%;
     max-width: 100%;
-    margin: 10px auto 0 auto;
+    margin: 25px auto 0 auto;
     padding: 10px;
-    flex-wrap: nowrap; /* Prevent icons from breaking into multiple rows */
-    overflow-x: visible; /* Standard display allows tools to be visible */
+    flex-wrap: nowrap;
+    overflow-x: visible;
+    position: relative;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
 }
-
 .link-wrapper {
     position: relative;
     display: inline-block;
-    flex-shrink: 0; /* Prevent icons from squeezing/shrinking */
+    flex-shrink: 0;
+    pointer-events: auto !important;
+    z-index: 1001 !important;
+    animation: float 4s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
 }
-
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
 .link-card {
     text-decoration: none;
-    color: #ffffff;
+    color: #fff;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     justify-content: center;
@@ -398,27 +385,31 @@ h1 {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 1002 !important;
 }
-
 .link-card i {
     font-size: 1.25rem;
-    color: #ffffff;
-    filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+    color: #fff;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
     transition: all 0.3s ease;
+    pointer-events: none;
 }
-
 .link-card:hover {
-    transform: scale(1.2);
+    transform: scale(1.25);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 15px var(--hover-glow, rgba(255, 255, 255, 0.4));
-    border-color: var(--hover-glow, rgba(255, 255, 255, 0.4));
+    box-shadow: 0 0 20px var(--hover-glow, rgba(0, 242, 254, 0.6));
+    border-color: var(--hover-glow, rgba(0, 242, 254, 0.6));
+    animation: glowPulse 2s infinite ease-in-out;
 }
-
-.link-card:hover i {
-    filter: drop-shadow(0 0 8px var(--hover-glow, #ffffff));
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 15px var(--hover-glow, rgba(0, 242, 254, 0.6)); }
+    50% { box-shadow: 0 0 30px var(--hover-glow, rgba(0, 242, 254, 0.8)); }
 }
-
-/* Tooltip Popup Styling */
+.link-card:active {
+    transform: scale(0.9);
+}
 .tooltip-text {
     visibility: hidden;
     width: auto;
@@ -430,7 +421,7 @@ h1 {
     border-radius: 6px;
     padding: 5px 8px;
     position: absolute;
-    z-index: 10;
+    z-index: 99999;
     bottom: 130%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
@@ -443,88 +434,43 @@ h1 {
     pointer-events: none;
     white-space: nowrap;
 }
-
-.tooltip-text::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgba(10, 10, 15, 0.9) transparent transparent transparent;
-}
-
 .link-wrapper:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
-
-/* Responsive Mobile Layout Tweaks - CLEAN HORIZONTAL SCROLL FOR MOBILE */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2.2rem;
-    }
-    .links-container {
-        gap: 10px;
-        overflow-x: auto; /* Enable side-scroll if device is too narrow */
-        justify-content: flex-start; /* Align from start for smoother scrolling */
-        padding: 15px 10px;
-        max-width: 92vw;
-        -webkit-overflow-scrolling: touch;
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  
-    }
-    .links-container::-webkit-scrollbar {
-        display: none; /* Hide messy mobile scrollbars */
-    }
-    .link-card {
-        width: 42px;
-        height: 42px;
-    }
-    .link-card i {
-        font-size: 1.1rem;
-    }
-}
-
-/* සාමාන්‍ය කර්සරය හැංගීම */
 html, body, a, button, #enter-overlay {
     cursor: none !important;
 }
-
-/* ──── නවීකරණය කරන ලද CUSTOM CURSOR STYLE ──── */
 .custom-cursor {
     position: fixed;
-    width: 6px;               /* ප්‍රමාණය කුඩා කලා */
-    height: 6px;              /* ප්‍රමාණය කුඩා කලා */
-    background-color: #ffffff; /* මැද තිත සුදු පාටින් */
+    width: 6px;
+    height: 6px;
+    background-color: #fff;
     border-radius: 50%;
-    pointer-events: none;
-    transform: translate(-50%, -50%); /* හරියටම මැදට කේන්ද්‍රගත කිරීම */
+    transform: translate(-50%, -50%);
     z-index: 9999999;
     transition: width 0.2s, height 0.2s, background-color 0.2s, box-shadow 0.2s;
-    border: none;              /* කලින් තිබ්බ බෝඩරය ඉවත් කලා */
-    
-    /* වටේ තිබ්බ පාටවල් මැදට ඒකරාශී කර සාදන ලද තද Neon Glow එකක් */
-    box-shadow: 
-        0 0 6px #00f2fe, 
-        0 0 12px #00f2fe, 
-        0 0 22px #00f2fe;
+    pointer-events: none !important;
+    box-shadow: 0 0 6px #00f2fe, 0 0 12px #00f2fe, 0 0 22px #00f2fe;
+    will-change: left, top;
 }
-
-/* Click කළ හැකි තැන් උඩට ගියවිට කර්සරය වෙනස් වන ආකාරය */
 .custom-cursor.hovered {
     width: 10px;
     height: 10px;
     background-color: #00f2fe;
-    box-shadow: 
-        0 0 10px #00f2fe, 
-        0 0 20px #00f2fe, 
-        0 0 35px #00f2fe;
+    box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 35px #00f2fe;
 }
-
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+.discord-status-container {
+    margin-bottom: 15px;
+    min-height: 20px;
+}
+.discord-custom-status, .discord-activity {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-top: 4px;
 }
