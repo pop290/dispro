@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>@popzzi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <!-- Linking External CSS -->
+    <link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-
     <div class="custom-cursor" id="custom-cursor"></div>
-
+    
     <div id="enter-overlay">
         <div class="enter-text">[ Click to Enter ]</div>
     </div>
-
-    <audio id="bg-music" src="i.mp3" loop></audio>
-
-    <div class="background-katana"></div>
-
+    
+    <audio id="bg-music" loop="" src="i.mp3"></audio>
     <div class="scanlines"></div>
-
     <div class="snow-container" id="snow"></div>
-
     <div id="star-container"></div>
-
+    
     <div class="profile-wrapper" id="profile-wrapper">
         <div class="profile-container">
-            
-            <!-- Live Discord Avatar & Decoration Wrapper -->
-            <div class="avatar-wrapper">
-                <!-- Discord Live Avatar එක (Lanyard එකෙන් ලෝඩ් වෙනකම් දැනට තියෙන gif එක පෙනෙයි) -->
-                <img src="https://r2.guns.lol/adbe91bf-b56e-47d8-a855-cc3059f32215.gif" alt="popzzi" class="avatar" id="discord-avatar">
-                
-                <!-- Discord Live Effect/Decoration එක වැටෙන තැන -->
-                <img id="discord-decoration" class="discord-decoration" src="" alt="" style="display: none;">
-                
-                <div class="status-dot"></div>
+            <div class="avatar-wrapper reveal-item delay-1">
+                <img alt="popzzi" class="avatar" id="discord-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaGqgoK-RTg9738bX33Gz9p50kToyIGYvBPiqkrvjqui5nFCCFOiJW2ezx2rzOsJcMOmTSn4NaC9cWnH9kcWimSlR93iO9-d4BCkmomfZB0l42Dm25l5-qyRhH7uFxa8oe0HoQxXvmZzDI6OFPrjJ2MNGWx1Mw4Aqr3PJ8UHi0Y61nSXqkQc2YxkktWd-pHyaKU6vpRV0KDzK-DqZnYR7ag6m2gJCExLKv9dBG3LhlT97DpGtDdqOGfwiz9Xe5b0kD0P4-2lQi6XEP"/>
+                <img alt="" class="discord-decoration" id="discord-decoration" src="" style="display: none;"/>
+                <div class="status-dot" id="status-dot"></div>
             </div>
-
-            <div>
+            
+            <div class="reveal-item delay-2">
                 <i class="fa-regular fa-star star-badge"></i>
             </div>
-
-            <div class="sparkle-text-container">
+            
+            <div class="sparkle-text-container reveal-item delay-2">
                 <h1>popzzi</h1>
-                <div class="sparkle-overlay"></div>
             </div>
             
-            <p class="bio">Pixcel play ground | Casual Gamer</p>
-
-            <div class="music-player">
+            <p class="bio reveal-item delay-3">Pixcel play ground | Casual Gamer</p>
+            
+            <div class="discord-status-container reveal-item delay-3" id="discord-status-container">
+                <div class="discord-custom-status" id="discord-custom-status"></div>
+                <div class="discord-activity" id="discord-activity"></div>
+            </div>
+            
+            <div class="music-player reveal-item delay-4">
                 <div class="player-main-content">
                     <div class="music-icon">
                         <i class="fa-solid fa-compact-disc fa-spin" id="disc-icon" style="animation-duration: 4s;"></i>
@@ -60,98 +54,86 @@
                         <div class="track-artist">Artemas</div>
                     </div>
                 </div>
-                
                 <div class="volume-container">
                     <button class="volume-btn" id="volume-toggle" title="Mute/Unmute">
                         <i class="fa-solid fa-volume-high" id="volume-icon"></i>
                     </button>
                     <div class="volume-slider-wrapper">
-                        <input type="range" class="volume-slider" id="volume-control" min="0" max="1" step="0.01" value="1">
+                        <input class="volume-slider" id="volume-control" max="1" min="0" step="0.01" type="range" value="1"/>
                     </div>
                 </div>
             </div>
-
-            <div class="links-container">
-                <div class="link-wrapper" style="--hover-glow: #5865F2;">
+            
+            <div class="links-container reveal-item delay-5">
+                <div class="link-wrapper" style="--hover-glow: #5865F2; --float-delay: 0s;">
                     <span class="tooltip-text">Discord</span>
-                    <a href="https://discord.com/users/popzzi_" target="_blank" class="link-card">
+                    <a class="link-card" href="https://discord.com/users/popzzi_" target="_blank">
                         <i class="fa-brands fa-discord"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #E1306C;">
+                <div class="link-wrapper" style="--hover-glow: #E1306C; --float-delay: 0.2s;">
                     <span class="tooltip-text">Instagram</span>
-                    <a href="https://www.instagram.com/sachinthanirmal0" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.instagram.com/sachinthanirmal0" target="_blank">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #313131;">
+                <div class="link-wrapper" style="--hover-glow: #313131; --float-delay: 0.4s;">
                     <span class="tooltip-text">Epic Games</span>
-                    <a href="https://epicgames.com" target="_blank" class="link-card">
+                    <a class="link-card" href="https://epicgames.com" target="_blank">
                         <i class="fa-solid fa-gamepad"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #ff4500;">
+                <div class="link-wrapper" style="--hover-glow: #ff4500; --float-delay: 0.6s;">
                     <span class="tooltip-text">Reddit</span>
-                    <a href="https://reddit.com/u/No_Communication1195" target="_blank" class="link-card">
+                    <a class="link-card" href="https://reddit.com/u/No_Communication1195" target="_blank">
                         <i class="fa-brands fa-reddit-alien"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #ff3333;">
+                <div class="link-wrapper" style="--hover-glow: #ff3333; --float-delay: 0.8s;">
                     <span class="tooltip-text">Roblox</span>
-                    <a href="https://www.roblox.com/share?code=1ba598def2a5b645909e196f00ef0101&type=Profile&source=ProfileShare&stamp=1780860618500" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.roblox.com/users/11082689813/profile?friendshipSourceType=ProfileShare" target="_blank">
                         <i class="fa-solid fa-cube"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #1DB954;">
+                <div class="link-wrapper" style="--hover-glow: #1DB954; --float-delay: 1.0s;">
                     <span class="tooltip-text">Spotify</span>
-                    <a href="https://open.spotify.com/user/31aeecrufr244az2ieomo7jijf3y?si=88fa07ca4d1340ac" target="_blank" class="link-card">
+                    <a class="link-card" href="https://open.spotify.com/user/31aeecrufr244az2ieomo7jijf3y?si=88fa07ca4d1340ac" target="_blank">
                         <i class="fa-brands fa-spotify"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #00adef;">
+                <div class="link-wrapper" style="--hover-glow: #00adef; --float-delay: 1.2s;">
                     <span class="tooltip-text">Steam</span>
-                    <a href="https://steamcommunity.com/profiles/76561199682107905/" target="_blank" class="link-card">
+                    <a class="link-card" href="https://steamcommunity.com/profiles/76561199682107905/" target="_blank">
                         <i class="fa-brands fa-steam"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #00f2fe;">
+                <div class="link-wrapper" style="--hover-glow: #00f2fe; --float-delay: 1.4s;">
                     <span class="tooltip-text">TikTok</span>
-                    <a href="https://www.tiktok.com/@popzzi__" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.tiktok.com/@popzzi__" target="_blank">
                         <i class="fa-brands fa-tiktok"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #9146FF;">
+                <div class="link-wrapper" style="--hover-glow: #9146FF; --float-delay: 1.6s;">
                     <span class="tooltip-text">Twitch</span>
-                    <a href="https://www.twitch.tv/popzzi__" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.twitch.tv/popzzi__" target="_blank">
                         <i class="fa-brands fa-twitch"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #107c10;">
+                <div class="link-wrapper" style="--hover-glow: #107c10; --float-delay: 1.8s;">
                     <span class="tooltip-text">Xbox</span>
-                    <a href="https://www.xbox.com/en-LK/play/user/popzzi0" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.xbox.com/en-LK/play/user/popzzi443" target="_blank">
                         <i class="fa-brands fa-xbox"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #ff0000;">
+                <div class="link-wrapper" style="--hover-glow: #ff0000; --float-delay: 2.0s;">
                     <span class="tooltip-text">YouTube</span>
-                    <a href="https://www.youtube.com/@popzzi__" target="_blank" class="link-card">
+                    <a class="link-card" href="https://www.youtube.com/@popzzi__" target="_blank">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>
-
-                <div class="link-wrapper" style="--hover-glow: #fafafa;">
+                <div class="link-wrapper" style="--hover-glow: #fafafa; --float-delay: 2.2s;">
                     <span class="tooltip-text">GitHub</span>
-                    <a href="https://github.com/popzzi290" target="_blank" class="link-card">
+                    <a class="link-card" href="https://github.com/popzzi290" target="_blank">
                         <i class="fa-brands fa-github"></i>
                     </a>
                 </div>
@@ -159,6 +141,7 @@
         </div>
     </div>
 
+    <!-- Linking External JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
