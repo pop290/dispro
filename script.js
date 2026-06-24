@@ -138,13 +138,14 @@ function updateClock() {
     const secHand = document.getElementById('sec-hand');
 
     if(slTimeEl) {
+        // Sri Lanka Timezone (Asia/Colombo)
         const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Colombo"});
         const slDate = new Date(now);
         let hours = slDate.getHours();
         let minutes = slDate.getMinutes();
         let seconds = slDate.getSeconds();
         
-        // 3D Transform used for high GPU rendering speed
+        // Analog Clock Rotation Math
         if(secHand) {
             const secDeg = (seconds * 6);
             const minDeg = (minutes * 6) + (seconds * 0.1);
@@ -155,6 +156,7 @@ function updateClock() {
             hourHand.style.transform = `rotate3d(0, 0, 1, ${hourDeg}deg)`;
         }
 
+        // Digital Time Format
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
@@ -177,10 +179,12 @@ const observerOptions = { root: snapContainer, threshold: 0.5 };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            // Update Active Nav Dot
             navDots.forEach(dot => dot.classList.remove('active'));
             const activeDot = document.querySelector(`.nav-dot[data-target="${entry.target.id}"]`);
             if (activeDot) activeDot.classList.add('active');
             
+            // Trigger Fade-in-up Animation for sections
             sections.forEach(sec => sec.classList.remove('active-section'));
             entry.target.classList.add('active-section');
         }
@@ -234,7 +238,7 @@ async function fetchViewCount() {
 }
 
 
-/* ──── ONEKO PIXEL CAT INTEGRATION (OPTIMIZED) ──── */
+/* ──── ONEKO PIXEL CAT INTEGRATION ──── */
 (function oneko() {
     const nekoEl = document.createElement("div");
     let nekoPosX = 32; let nekoPosY = 32;
@@ -263,16 +267,16 @@ async function fetchViewCount() {
         nekoEl.style.zIndex = "9999999";
         nekoEl.style.backgroundImage = "url('https://raw.githubusercontent.com/adryd325/oneko.js/main/oneko.gif')";
         nekoEl.style.imageRendering = "pixelated";
-        nekoEl.style.left = "16px";
-        nekoEl.style.top = "16px";
+        nekoEl.style.left = "0px";
+        nekoEl.style.top = "0px";
         nekoEl.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.6))";
-        nekoEl.style.transform = "translate3d(0,0,0)";
+        nekoEl.style.transform = "translate3d(16px,16px,0)";
         
         document.body.appendChild(nekoEl);
 
         window.addEventListener('mousemove', (event) => {
             mousePosX = event.clientX; mousePosY = event.clientY;
-        }, {passive: true}); // Performance optimization for scroll/mouse touch mechanics
+        }, {passive: true}); 
 
         setInterval(frame, 100);
     }
@@ -306,7 +310,6 @@ async function fetchViewCount() {
     }
 
     function frame() {
-        // Skip frames calculation if mouse hasn't moved to avoid unnecessary CPU loops
         if (mousePosX === lastMouseX && mousePosY === lastMouseY && idleAnimation === "sleeping") {
             idle();
             return;
@@ -336,7 +339,6 @@ async function fetchViewCount() {
         nekoPosX -= (diffX / distance) * nekoSpeed;
         nekoPosY -= (diffY / distance) * nekoSpeed;
         
-        // Translate3d gives absolute 60fps smoothing using GPU
         nekoEl.style.transform = `translate3d(${nekoPosX - 16}px, ${nekoPosY - 16}px, 0)`;
         lastMouseX = mousePosX; lastMouseY = mousePosY;
     }
@@ -365,9 +367,9 @@ if (volumeToggle && bgMusic) {
     });
 }
 
-/* ──── INTERACTIVE SNOW (OPTIMIZED TO 15 DROPS) ──── */
+/* ──── INTERACTIVE SNOW (15 DROPS) ──── */
 const snowContainer = document.getElementById('snow');
-const maxSnowflakes = 15; // Optimized from 45 to 15 for saving extensive CPU cycles
+const maxSnowflakes = 15; 
 const snowflakes = []; let currentWindX = 0; let speedBoost = 0; let lastMouseXSnow = window.innerWidth / 2; let targetWindX = 0;
 class Snowflake {
     constructor() { this.reset(); this.y = Math.random() * window.innerHeight; }
@@ -393,14 +395,23 @@ const titleText = "@popzzi"; let currentIdx = 0; let isDeleting = false; let typ
 function animateTitleLoop() { if (!isDeleting && currentIdx <= titleText.length) { document.title = titleText.substring(0, currentIdx) || " "; currentIdx++; typingSpeed = 200; } else if (isDeleting && currentIdx >= 0) { document.title = titleText.substring(0, currentIdx) || " "; currentIdx--; typingSpeed = 100; } if (currentIdx > titleText.length) { isDeleting = true; currentIdx = titleText.length; typingSpeed = 2500; } else if (currentIdx < 0) { isDeleting = false; currentIdx = 0; typingSpeed = 800; } setTimeout(animateTitleLoop, typingSpeed); }
 animateTitleLoop();
 
+/* ──── DVD PLAYER PHYSICS ANIMATION (1 STAR ONLY FOR LOW RAM) ──── */
 const starContainer = document.getElementById('star-container');
 const neonColors = ['#00f2fe', '#00ff66', '#ff007f', '#ff00ff', '#ffff00', '#00ffff', '#ff3333', '#9d4edd'];
 const activeStars = [];
 if (starContainer) {
-    for(let i=0; i < 5; i++) {
-        const starEl = document.createElement('i'); starEl.className = "fa-solid fa-star orbit-star"; starContainer.appendChild(starEl);
-        activeStars.push({ element: starEl, x: Math.random() * (window.innerWidth - 30), y: Math.random() * (window.innerHeight - 30), dx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1), dy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1), size: 16 });
-    }
+    // තාරකා 5ක් වෙනුවට හරියටම 1 තාරකාවක් විතරක් DVD විදිහට හැදුවා
+    const starEl = document.createElement('i'); 
+    starEl.className = "fa-solid fa-star orbit-star"; 
+    starContainer.appendChild(starEl);
+    activeStars.push({ 
+        element: starEl, 
+        x: Math.random() * (window.innerWidth - 30), 
+        y: Math.random() * (window.innerHeight - 30), 
+        dx: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1), 
+        dy: (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1), 
+        size: 16 
+    });
 }
 function updateStarsPhysicsAnimation() {
     activeStars.forEach(star => {
@@ -414,11 +425,10 @@ function updateStarsPhysicsAnimation() {
 }
 if (activeStars.length > 0) updateStarsPhysicsAnimation();
 
-/* Mouse Particles Logic (OPTIMIZED THRESHOLD) */
+/* Mouse Particles Logic (OPTIMIZED DROPRATE) */
 window.addEventListener('mousemove', (e) => {
     const customCursor = document.getElementById('custom-cursor'); if(customCursor) { customCursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate3d(-50%, -50%, 0)`; customCursor.style.left = '0px'; customCursor.style.top = '0px'; }
     
-    // Drop rate optimization: Increased random filter threshold from 0.25 to 0.65 to drop significantly fewer particles
     if (Math.random() > 0.65) { 
         const p = document.createElement('i'); p.className = "fa-solid fa-star cursor-particle";
         const rc = neonColors[Math.floor(Math.random() * neonColors.length)];
