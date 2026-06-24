@@ -67,9 +67,10 @@ html, body {
 
 /* ──── VIEWS COUNTER WIDGET ──── */
 .views-counter {
-    position: fixed;
-    bottom: 25px;
-    left: 30px;
+    position: fixed !important;
+    bottom: 25px !important;
+    left: 30px !important;
+    top: auto !important; 
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
@@ -81,7 +82,7 @@ html, body {
     gap: 8px;
     font-size: 0.9rem;
     color: #aaa;
-    z-index: 99999999; 
+    z-index: 99999999 !important; 
     cursor: default;
     pointer-events: auto;
 }
@@ -187,7 +188,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
     width: 90%;
     max-width: 850px;
     border-radius: 30px;
-    padding: 2px; /* Border thickness */
+    padding: 2px;
     overflow: hidden; 
     z-index: 10;
     margin: 0 auto;
@@ -314,16 +315,80 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 }
 .about-card .highlight { color: #fff; font-weight: bold; font-family: monospace;}
 
-/* Timezone Widget */
-.timezone-widget {
-    margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 15px;
-    background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 15px;
-    border: 1px solid rgba(255,255,255,0.1); width: 100%;
+/* ──── HYBRID GLITCH CLOCK ──── */
+.hybrid-clock-widget {
+    margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 20px;
+    background: rgba(10, 10, 15, 0.8); padding: 15px 25px; border-radius: 12px;
+    border: 2px solid rgba(0, 255, 255, 0.3); width: 100%;
+    box-shadow: 4px 4px 0px rgba(255, 0, 255, 0.5), -4px -4px 0px rgba(0, 255, 255, 0.2); 
+    position: relative; overflow: hidden;
 }
-.clock-icon { font-size: 2rem; color: #fff; }
-.time-info { display: flex; flex-direction: column; }
-.current-time { font-size: 1.2rem; font-weight: bold; color: #fff; font-family: monospace; }
-.time-zone-text { font-size: 0.8rem; color: #aaa; }
+
+.hybrid-clock-widget::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 10px 10px; pointer-events: none;
+}
+
+.analog-clock {
+    width: 60px; height: 60px; border: 3px solid #fff; border-radius: 50%; position: relative;
+    box-shadow: 0 0 10px #00ffff, inset 0 0 10px #ff00ff; background: #050507; flex-shrink: 0;
+}
+
+.analog-clock::after {
+    content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px dashed rgba(255, 255, 255, 0.3); border-radius: 50%;
+}
+
+.clock-face {
+    width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+}
+
+.hand {
+    position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #fff;
+    transition: transform 0.05s cubic-bezier(0.4, 2.08, 0.55, 0.44); z-index: 5;
+}
+
+.hour-hand { width: 4px; height: 16px; margin-left: -2px; background: #ff00ff; box-shadow: 0 0 5px #ff00ff; border-radius: 2px;}
+.min-hand { width: 3px; height: 22px; margin-left: -1.5px; background: #00ffff; box-shadow: 0 0 5px #00ffff; border-radius: 2px;}
+.sec-hand { width: 2px; height: 28px; margin-left: -1px; background: #00ff66; box-shadow: 0 0 8px #00ff66; }
+
+.clock-center {
+    position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; background: #fff;
+    border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 5px #fff; z-index: 10;
+}
+
+.time-info { display: flex; flex-direction: column; z-index: 2; align-items: flex-start; }
+.time-zone-text { font-size: 0.8rem; color: #aaa; margin-top: 2px;}
+
+.pixel-text {
+    font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; font-weight: 900; color: #fff;
+    text-shadow: 2px 0px 0px #ff00ff, -2px 0px 0px #00ffff; letter-spacing: 2px; position: relative;
+    animation: glitch-time 3s infinite linear alternate-reverse;
+}
+
+.pixel-text::before, .pixel-text::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+}
+.pixel-text::before { left: 2px; text-shadow: -2px 0 red; clip: rect(24px, 550px, 90px, 0); animation: glitch-anim-time 3s infinite linear alternate-reverse; }
+.pixel-text::after { left: -2px; text-shadow: -2px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-anim2-time 2.5s infinite linear alternate-reverse; }
+
+@keyframes glitch-anim-time {
+    0% { clip: rect(10px, 9999px, 15px, 0); transform: translate(0); }
+    20% { clip: rect(5px, 9999px, 20px, 0); transform: translate(-2px, 1px); }
+    40% { clip: rect(15px, 9999px, 5px, 0); transform: translate(2px, -1px); }
+    60% { clip: rect(20px, 9999px, 10px, 0); transform: translate(-2px, 1px); }
+    80% { clip: rect(5px, 9999px, 25px, 0); transform: translate(2px, -1px); }
+    100% { clip: rect(15px, 9999px, 10px, 0); transform: translate(0); }
+}
+@keyframes glitch-anim2-time {
+    0% { clip: rect(20px, 9999px, 5px, 0); transform: translate(0); }
+    20% { clip: rect(15px, 9999px, 25px, 0); transform: translate(2px, -1px); }
+    40% { clip: rect(5px, 9999px, 15px, 0); transform: translate(-2px, 1px); }
+    60% { clip: rect(25px, 9999px, 5px, 0); transform: translate(2px, -1px); }
+    80% { clip: rect(10px, 9999px, 20px, 0); transform: translate(-2px, 1px); }
+    100% { clip: rect(5px, 9999px, 25px, 0); transform: translate(0); }
+}
 
 /* ──── HORROR / PROJECTS SECTION ──── */
 .projects-container { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -395,7 +460,6 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
     80% { clip: rect(41px, 9999px, 15px, 0); transform: translate(-5px, 5px); }
     100% { clip: rect(95px, 9999px, 80px, 0); transform: translate(0); }
 }
-
 
 .small-text { font-size: 0.9rem; color: #aaa; letter-spacing: 1px; }
 .small-text.darker { color: #666; margin-top: 10px; }
