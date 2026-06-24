@@ -138,32 +138,30 @@ function updateClock() {
     const secHand = document.getElementById('sec-hand');
 
     if(slTimeEl) {
-        // Sri Lanka Timezone (Asia/Colombo)
         const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Colombo"});
         const slDate = new Date(now);
         let hours = slDate.getHours();
         let minutes = slDate.getMinutes();
         let seconds = slDate.getSeconds();
         
-        // Analog Clock Rotation Math
+        // 3D Transform used for high GPU rendering speed
         if(secHand) {
             const secDeg = (seconds * 6);
             const minDeg = (minutes * 6) + (seconds * 0.1);
             const hourDeg = ((hours % 12) * 30) + (minutes * 0.5);
             
-            secHand.style.transform = `rotate(${secDeg}deg)`;
-            minHand.style.transform = `rotate(${minDeg}deg)`;
-            hourHand.style.transform = `rotate(${hourDeg}deg)`;
+            secHand.style.transform = `rotate3d(0, 0, 1, ${secDeg}deg)`;
+            minHand.style.transform = `rotate3d(0, 0, 1, ${minDeg}deg)`;
+            hourHand.style.transform = `rotate3d(0, 0, 1, ${hourDeg}deg)`;
         }
 
-        // Digital Time Format
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
         
         const timeString = `${hours}:${minutes}:${seconds}`;
         slTimeEl.innerText = timeString;
-        slTimeEl.setAttribute('data-text', timeString); // Requried for the CSS glitch effect
+        slTimeEl.setAttribute('data-text', timeString); 
     }
 }
 setInterval(updateClock, 1000);
@@ -179,12 +177,10 @@ const observerOptions = { root: snapContainer, threshold: 0.5 };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Update Active Nav Dot
             navDots.forEach(dot => dot.classList.remove('active'));
             const activeDot = document.querySelector(`.nav-dot[data-target="${entry.target.id}"]`);
             if (activeDot) activeDot.classList.add('active');
             
-            // Trigger Fade-in-up Animation for sections
             sections.forEach(sec => sec.classList.remove('active-section'));
             entry.target.classList.add('active-section');
         }
@@ -238,7 +234,7 @@ async function fetchViewCount() {
 }
 
 
-/* ──── ONEKO PIXEL CAT INTEGRATION ──── */
+/* ──── ONEKO PIXEL CAT INTEGRATION (OPTIMIZED) ──── */
 (function oneko() {
     const nekoEl = document.createElement("div");
     let nekoPosX = 32; let nekoPosY = 32;
@@ -246,6 +242,7 @@ async function fetchViewCount() {
     let frameCount = 0; let idleTime = 0;
     let idleAnimation = null; let idleAnimationFrame = 0;
     const nekoSpeed = 10; 
+    let lastMouseX = 0; let lastMouseY = 0;
 
     const spriteSets = {
         idle: [[-3, -3]], alert: [[-7, -3]],
@@ -269,12 +266,13 @@ async function fetchViewCount() {
         nekoEl.style.left = "16px";
         nekoEl.style.top = "16px";
         nekoEl.style.filter = "drop-shadow(0 0 4px rgba(255,255,255,0.6))";
+        nekoEl.style.transform = "translate3d(0,0,0)";
         
         document.body.appendChild(nekoEl);
 
         window.addEventListener('mousemove', (event) => {
             mousePosX = event.clientX; mousePosY = event.clientY;
-        });
+        }, {passive: true}); // Performance optimization for scroll/mouse touch mechanics
 
         setInterval(frame, 100);
     }
@@ -308,11 +306,21 @@ async function fetchViewCount() {
     }
 
     function frame() {
+        // Skip frames calculation if mouse hasn't moved to avoid unnecessary CPU loops
+        if (mousePosX === lastMouseX && mousePosY === lastMouseY && idleAnimation === "sleeping") {
+            idle();
+            return;
+        }
+        
         frameCount += 1;
         const diffX = nekoPosX - mousePosX; const diffY = nekoPosY - mousePosY;
         const distance = Math.sqrt(diffX ** 2 + diffY ** 2);
 
-        if (distance < nekoSpeed || distance < 48) { idle(); return; }
+        if (distance < nekoSpeed || distance < 48) { 
+            lastMouseX = mousePosX; lastMouseY = mousePosY;
+            idle(); 
+            return; 
+        }
         idleAnimation = null; idleAnimationFrame = 0;
 
         if (idleTime > 1) {
@@ -327,7 +335,10 @@ async function fetchViewCount() {
 
         nekoPosX -= (diffX / distance) * nekoSpeed;
         nekoPosY -= (diffY / distance) * nekoSpeed;
-        nekoEl.style.left = `${nekoPosX - 16}px`; nekoEl.style.top = `${nekoPosY - 16}px`;
+        
+        // Translate3d gives absolute 60fps smoothing using GPU
+        nekoEl.style.transform = `translate3d(${nekoPosX - 16}px, ${nekoPosY - 16}px, 0)`;
+        lastMouseX = mousePosX; lastMouseY = mousePosY;
     }
     create();
 })();
@@ -354,9 +365,10 @@ if (volumeToggle && bgMusic) {
     });
 }
 
-/* ──── INTERACTIVE SNOW ──── */
+/* ──── INTERACTIVE SNOW (OPTIMIZED TO 15 DROPS) ──── */
 const snowContainer = document.getElementById('snow');
-const maxSnowflakes = 45; const snowflakes = []; let currentWindX = 0; let speedBoost = 0; let lastMouseXSnow = window.innerWidth / 2; let targetWindX = 0;
+const maxSnowflakes = 15; // Optimized from 45 to 15 for saving extensive CPU cycles
+const snowflakes = []; let currentWindX = 0; let speedBoost = 0; let lastMouseXSnow = window.innerWidth / 2; let targetWindX = 0;
 class Snowflake {
     constructor() { this.reset(); this.y = Math.random() * window.innerHeight; }
     reset() { this.x = Math.random() * window.innerWidth; this.y = -30; this.size = Math.random() * 2 + 1; this.speedY = Math.random() * 0.7 + 0.5; this.opacity = Math.random() * 0.4 + 0.3; this.sway = Math.random() * 0.2 - 0.1; }
@@ -371,7 +383,8 @@ if (snowContainer) {
 window.addEventListener('mousemove', (e) => {
     targetWindX = (e.clientX - (window.innerWidth / 2)) * 0.005;
     const currentSpeed = Math.abs(e.clientX - lastMouseXSnow); if (currentSpeed > speedBoost) speedBoost = currentSpeed; lastMouseXSnow = e.clientX;
-});
+}, {passive: true});
+
 function animateSnow() { currentWindX += (targetWindX - currentWindX) * 0.04; speedBoost *= 0.94; snowflakes.forEach(flake => { flake.update(); flake.draw(); }); requestAnimationFrame(animateSnow); }
 animateSnow();
 
@@ -401,10 +414,12 @@ function updateStarsPhysicsAnimation() {
 }
 if (activeStars.length > 0) updateStarsPhysicsAnimation();
 
-/* Mouse Particles Logic */
+/* Mouse Particles Logic (OPTIMIZED THRESHOLD) */
 window.addEventListener('mousemove', (e) => {
-    const customCursor = document.getElementById('custom-cursor'); if(customCursor) { customCursor.style.left = e.clientX + 'px'; customCursor.style.top = e.clientY + 'px'; }
-    if (Math.random() > 0.25) { 
+    const customCursor = document.getElementById('custom-cursor'); if(customCursor) { customCursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate3d(-50%, -50%, 0)`; customCursor.style.left = '0px'; customCursor.style.top = '0px'; }
+    
+    // Drop rate optimization: Increased random filter threshold from 0.25 to 0.65 to drop significantly fewer particles
+    if (Math.random() > 0.65) { 
         const p = document.createElement('i'); p.className = "fa-solid fa-star cursor-particle";
         const rc = neonColors[Math.floor(Math.random() * neonColors.length)];
         p.style.color = rc; p.style.filter = `drop-shadow(0 0 5px ${rc}) drop-shadow(0 0 10px ${rc})`;
@@ -413,7 +428,7 @@ window.addEventListener('mousemove', (e) => {
         p.style.setProperty('--mx', `${e.clientX + (Math.random() - 0.5) * 60}px`); p.style.setProperty('--my', `${e.clientY + (Math.random() - 0.5) * 60}px`);
         document.body.appendChild(p); setTimeout(() => { p.remove(); }, 800);
     }
-});
+}, {passive: true});
 
 function refreshHoverTargets() {
     const customCursor = document.getElementById('custom-cursor');
