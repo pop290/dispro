@@ -58,6 +58,7 @@ html, body {
     opacity: 0;
     transform: translateY(40px);
     transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, opacity; /* GPU Performance optimization */
 }
 
 .section.active-section .section-animate {
@@ -134,7 +135,7 @@ html, body {
 .orbit-star { position: absolute; font-size: 1rem; pointer-events: none; color: #fff; will-change: transform; transition: color 0.15s ease; }
 
 /* ──── MOUSE CURSOR PARTICLES ──── */
-.custom-cursor { position: fixed; width: 6px; height: 6px; background-color: #fff; border-radius: 50%; transform: translate(-50%, -50%); z-index: 9999999; transition: width 0.2s, height 0.2s, background-color 0.2s, box-shadow 0.2s; pointer-events: none !important; box-shadow: 0 0 6px #00f2fe, 0 0 12px #00f2fe, 0 0 22px #00f2fe; will-change: left, top; }
+.custom-cursor { position: fixed; width: 6px; height: 6px; background-color: #fff; border-radius: 50%; transform: translate3d(-50%, -50%, 0); z-index: 9999999; transition: width 0.2s, height 0.2s, background-color 0.2s, box-shadow 0.2s; pointer-events: none !important; box-shadow: 0 0 6px #00f2fe, 0 0 12px #00f2fe, 0 0 22px #00f2fe; will-change: transform; }
 .custom-cursor.hovered { width: 10px; height: 10px; background-color: #00f2fe; box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 35px #00f2fe; }
 .cursor-particle { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 999998; font-size: 10px; will-change: transform, opacity; animation: particleFade 0.8s forwards ease-out; }
 @keyframes particleFade { 0% { transform: translate3d(var(--x), var(--y), 0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translate3d(var(--mx), var(--my), 0) scale(0) rotate(180deg); opacity: 0; } }
@@ -347,6 +348,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 .hand {
     position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #fff;
     transition: transform 0.05s cubic-bezier(0.4, 2.08, 0.55, 0.44); z-index: 5;
+    will-change: transform; /* Hardware Acceleration Optimization */
 }
 
 .hour-hand { width: 4px; height: 16px; margin-left: -2px; background: #ff00ff; box-shadow: 0 0 5px #ff00ff; border-radius: 2px;}
@@ -355,7 +357,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 
 .clock-center {
     position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; background: #fff;
-    border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 5px #fff; z-index: 10;
+    border-radius: 50%; transform: translate3d(-50%, -50%, 0); box-shadow: 0 0 5px #fff; z-index: 10;
 }
 
 .time-info { display: flex; flex-direction: column; z-index: 2; align-items: flex-start; }
@@ -374,20 +376,20 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 .pixel-text::after { left: -2px; text-shadow: -2px 0 blue; clip: rect(85px, 550px, 140px, 0); animation: glitch-anim2-time 2.5s infinite linear alternate-reverse; }
 
 @keyframes glitch-anim-time {
-    0% { clip: rect(10px, 9999px, 15px, 0); transform: translate(0); }
-    20% { clip: rect(5px, 9999px, 20px, 0); transform: translate(-2px, 1px); }
-    40% { clip: rect(15px, 9999px, 5px, 0); transform: translate(2px, -1px); }
-    60% { clip: rect(20px, 9999px, 10px, 0); transform: translate(-2px, 1px); }
-    80% { clip: rect(5px, 9999px, 25px, 0); transform: translate(2px, -1px); }
-    100% { clip: rect(15px, 9999px, 10px, 0); transform: translate(0); }
+    0% { clip: rect(10px, 9999px, 15px, 0); transform: translate3d(0, 0, 0); }
+    20% { clip: rect(5px, 9999px, 20px, 0); transform: translate3d(-2px, 1px, 0); }
+    40% { clip: rect(15px, 9999px, 5px, 0); transform: translate3d(2px, -1px, 0); }
+    60% { clip: rect(20px, 9999px, 10px, 0); transform: translate3d(-2px, 1px, 0); }
+    80% { clip: rect(5px, 9999px, 25px, 0); transform: translate3d(2px, -1px, 0); }
+    100% { clip: rect(15px, 9999px, 10px, 0); transform: translate3d(0, 0, 0); }
 }
 @keyframes glitch-anim2-time {
-    0% { clip: rect(20px, 9999px, 5px, 0); transform: translate(0); }
-    20% { clip: rect(15px, 9999px, 25px, 0); transform: translate(2px, -1px); }
-    40% { clip: rect(5px, 9999px, 15px, 0); transform: translate(-2px, 1px); }
-    60% { clip: rect(25px, 9999px, 5px, 0); transform: translate(2px, -1px); }
-    80% { clip: rect(10px, 9999px, 20px, 0); transform: translate(-2px, 1px); }
-    100% { clip: rect(5px, 9999px, 25px, 0); transform: translate(0); }
+    0% { clip: rect(20px, 9999px, 5px, 0); transform: translate3d(0, 0, 0); }
+    20% { clip: rect(15px, 9999px, 25px, 0); transform: translate3d(2px, -1px, 0); }
+    40% { clip: rect(5px, 9999px, 15px, 0); transform: translate3d(-2px, 1px, 0); }
+    60% { clip: rect(25px, 9999px, 5px, 0); transform: translate3d(2px, -1px, 0); }
+    80% { clip: rect(10px, 9999px, 20px, 0); transform: translate3d(-2px, 1px, 0); }
+    100% { clip: rect(5px, 9999px, 25px, 0); transform: translate3d(0, 0, 0); }
 }
 
 /* ──── HORROR / PROJECTS SECTION ──── */
@@ -444,21 +446,21 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 }
 
 @keyframes glitch-anim {
-    0% { clip: rect(74px, 9999px, 80px, 0); transform: translate(0); }
-    20% { clip: rect(12px, 9999px, 98px, 0); transform: translate(-5px, 5px); }
-    40% { clip: rect(32px, 9999px, 14px, 0); transform: translate(5px, -5px); }
-    60% { clip: rect(88px, 9999px, 52px, 0); transform: translate(-5px, 5px); }
-    80% { clip: rect(21px, 9999px, 35px, 0); transform: translate(5px, -5px); }
-    100% { clip: rect(65px, 9999px, 20px, 0); transform: translate(0); }
+    0% { clip: rect(74px, 9999px, 80px, 0); transform: translate3d(0, 0, 0); }
+    20% { clip: rect(12px, 9999px, 98px, 0); transform: translate3d(-5px, 5px, 0); }
+    40% { clip: rect(32px, 9999px, 14px, 0); transform: translate3d(5px, -5px, 0); }
+    60% { clip: rect(88px, 9999px, 52px, 0); transform: translate3d(-5px, 5px, 0); }
+    80% { clip: rect(21px, 9999px, 35px, 0); transform: translate3d(5px, -5px, 0); }
+    100% { clip: rect(65px, 9999px, 20px, 0); transform: translate3d(0, 0, 0); }
 }
 
 @keyframes glitch-anim2 {
-    0% { clip: rect(34px, 9999px, 20px, 0); transform: translate(0); }
-    20% { clip: rect(72px, 9999px, 48px, 0); transform: translate(5px, -5px); }
-    40% { clip: rect(12px, 9999px, 84px, 0); transform: translate(-5px, 5px); }
-    60% { clip: rect(58px, 9999px, 22px, 0); transform: translate(5px, -5px); }
-    80% { clip: rect(41px, 9999px, 15px, 0); transform: translate(-5px, 5px); }
-    100% { clip: rect(95px, 9999px, 80px, 0); transform: translate(0); }
+    0% { clip: rect(34px, 9999px, 20px, 0); transform: translate3d(0, 0, 0); }
+    20% { clip: rect(72px, 9999px, 48px, 0); transform: translate3d(5px, -5px, 0); }
+    40% { clip: rect(12px, 9999px, 84px, 0); transform: translate3d(-5px, 5px, 0); }
+    60% { clip: rect(58px, 9999px, 22px, 0); transform: translate3d(5px, -5px, 0); }
+    80% { clip: rect(41px, 9999px, 15px, 0); transform: translate3d(-5px, 5px, 0); }
+    100% { clip: rect(95px, 9999px, 80px, 0); transform: translate3d(0, 0, 0); }
 }
 
 .small-text { font-size: 0.9rem; color: #aaa; letter-spacing: 1px; }
@@ -475,4 +477,9 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
     .lyrics-track-artist { font-size: 0.8rem; }
     .horror-text { font-size: 3rem; }
     .section-title { font-size: 1.8rem; }
+}
+
+/* Optimized Performance Utility Styles */
+.orbit-star, .cursor-particle, div#snow div {
+    will-change: transform;
 }
