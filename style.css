@@ -58,7 +58,7 @@ html, body {
     opacity: 0;
     transform: translateY(40px);
     transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform, opacity; /* GPU Performance optimization */
+    will-change: transform, opacity;
 }
 
 .section.active-section .section-animate {
@@ -130,7 +130,7 @@ html, body {
 .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.3s; }
 .delay-3 { transition-delay: 0.5s; } .delay-4 { transition-delay: 0.7s; } .delay-5 { transition-delay: 0.9s; }
 
-/* ──── BACKGROUND ORBIT STARS ──── */
+/* ──── BACKGROUND ORBIT STARS (DVD PLAYER PHYSICS FACE) ──── */
 #star-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
 .orbit-star { position: absolute; font-size: 1rem; pointer-events: none; color: #fff; will-change: transform; transition: color 0.15s ease; }
 
@@ -189,7 +189,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
     width: 90%;
     max-width: 850px;
     border-radius: 30px;
-    padding: 2px;
+    padding: 2px; /* Border thickness */
     overflow: hidden; 
     z-index: 10;
     margin: 0 auto;
@@ -348,7 +348,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 .hand {
     position: absolute; bottom: 50%; left: 50%; transform-origin: bottom center; background: #fff;
     transition: transform 0.05s cubic-bezier(0.4, 2.08, 0.55, 0.44); z-index: 5;
-    will-change: transform; /* Hardware Acceleration Optimization */
+    will-change: transform;
 }
 
 .hour-hand { width: 4px; height: 16px; margin-left: -2px; background: #ff00ff; box-shadow: 0 0 5px #ff00ff; border-radius: 2px;}
@@ -480,6 +480,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 }
 
 /* Optimized Performance Utility Styles */
-.orbit-star, .cursor-particle, div#snow div {
-    will-change: transform;
+.orbit-star, .cursor-particle, div#snow div, .animated-border, .neon-card-wrapper {
+    backface-visibility: hidden;
+    perspective: 1000;
 }
