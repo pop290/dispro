@@ -1,9 +1,9 @@
 /* ──── PLAYLIST SETTINGS ──── */
 const playlist = [
+    { title: "SugarCrash!", artist: "ElyOtto", src: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/suga.mp3", cover: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/suga.png" },
     { title: "i like the way you kiss me", artist: "Artemas", src: "i.mp3", cover: "https://i1.sndcdn.com/artworks-S4x5o4CRFkbgsm1L-tYVy3g-t1080x1080.jpg" },
     { title: "Thunder", artist: "Gabry Ponte, LUM!X, Prezioso", src: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/Thunder.mp3", cover: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/thunder.png" },
-    { title: "She Said She's from the Islands (Kompa)", artist: "Glenn Callin", src: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/she.mp3", cover: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/she.png" },
-    { title: "SugarCrash!", artist: "ElyOtto", src: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/suga.mp3", cover: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/suga.png" }
+    { title: "She Said She's from the Islands (Kompa)", artist: "Glenn Callin", src: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/she.mp3", cover: "https://raw.githubusercontent.com/pop290/dispro/refs/heads/main/she.png" }
 ];
 let currentTrackIndex = 0;
 
@@ -133,6 +133,10 @@ if(bgMusic) {
 /* ──── LIVE CLOCK / TIMEZONE LOGIC ──── */
 function updateClock() {
     const slTimeEl = document.getElementById('sl-time');
+    const hourHand = document.getElementById('hour-hand');
+    const minHand = document.getElementById('min-hand');
+    const secHand = document.getElementById('sec-hand');
+
     if(slTimeEl) {
         // Sri Lanka Timezone (Asia/Colombo)
         const now = new Date().toLocaleString("en-US", {timeZone: "Asia/Colombo"});
@@ -141,11 +145,25 @@ function updateClock() {
         let minutes = slDate.getMinutes();
         let seconds = slDate.getSeconds();
         
+        // Analog Clock Rotation Math
+        if(secHand) {
+            const secDeg = (seconds * 6);
+            const minDeg = (minutes * 6) + (seconds * 0.1);
+            const hourDeg = ((hours % 12) * 30) + (minutes * 0.5);
+            
+            secHand.style.transform = `rotate(${secDeg}deg)`;
+            minHand.style.transform = `rotate(${minDeg}deg)`;
+            hourHand.style.transform = `rotate(${hourDeg}deg)`;
+        }
+
+        // Digital Time Format
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
         
-        slTimeEl.innerText = `${hours}:${minutes}:${seconds}`;
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        slTimeEl.innerText = timeString;
+        slTimeEl.setAttribute('data-text', timeString); // Requried for the CSS glitch effect
     }
 }
 setInterval(updateClock, 1000);
@@ -206,17 +224,16 @@ async function fetchViewCount() {
     const countEl = document.getElementById('view-count-text');
     if(!countEl) return;
     try {
-        // Free counter API call specific to this site
-        const res = await fetch('https://api.counterapi.dev/v1/popzzi/portfolio/up');
+        const res = await fetch('https://api.counterapi.dev/v1/popzzi_top/visits/up');
         const data = await res.json();
         if(data && data.count) {
             countEl.innerText = data.count.toLocaleString();
         } else {
-            countEl.innerText = "40,311";
+            countEl.innerText = "1";
         }
     } catch (err) {
         console.log("View count error:", err);
-        countEl.innerText = "40,310"; // Fallback if API fails
+        countEl.innerText = "1"; 
     }
 }
 
