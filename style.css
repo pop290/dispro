@@ -130,7 +130,7 @@ html, body {
 .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.3s; }
 .delay-3 { transition-delay: 0.5s; } .delay-4 { transition-delay: 0.7s; } .delay-5 { transition-delay: 0.9s; }
 
-/* ──── BACKGROUND ORBIT STARS (DVD PLAYER PHYSICS FACE) ──── */
+/* ──── BACKGROUND ORBIT STARS ──── */
 #star-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
 .orbit-star { position: absolute; font-size: 1rem; pointer-events: none; color: #fff; will-change: transform; transition: color 0.15s ease; }
 
@@ -394,7 +394,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 
 /* ──── HORROR / PROJECTS SECTION ──── */
 .projects-container { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.projects-title { font-family: 'Uncial Antiqua', cursive; font-size: 2.2rem; }
+.projects-title { font-family: monospace; font-size: 2.2rem; }
 
 .horror-wrapper { height: 35vh; max-width: 600px; }
 .horror-card { justify-content: center; align-items: center; text-align: center; }
@@ -467,6 +467,32 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
 .small-text.darker { color: #666; margin-top: 10px; }
 .emoticon-title { font-family: monospace; font-size: 2.5rem; color: #fff; font-weight: bold; transition: all 0.2s ease; margin-top: 30px; letter-spacing: 0; text-shadow: 0 0 15px rgba(255,255,255,0.5);}
 
+/* ──── RAW TEXT WIDGET (NO CARD + HIGH GLOW + BIG SIZE + MV BOLI FONT) ──── */
+.thanks-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.raw-thanks-text {
+    font-family: 'MV Boli', 'Courier New', sans-serif; /* MV Boli Font එක දුන්නා */
+    font-size: 5rem; 
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 
+                 0 0 40px rgba(255, 255, 255, 0.4), 
+                 0 0 60px rgba(255, 255, 255, 0.2);
+    animation: textBreathe 4s infinite ease-in-out;
+}
+
+@keyframes textBreathe {
+    0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.3); }
+    50% { transform: scale(1.03); text-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 255, 255, 0.5); }
+}
+
 @media (max-width: 768px) {
     .neon-card-wrapper { width: 95%; }
     .lyrics-card-main { height: 65vh; }
@@ -477,6 +503,7 @@ html, body, a, button, #enter-overlay { cursor: none !important; }
     .lyrics-track-artist { font-size: 0.8rem; }
     .horror-text { font-size: 3rem; }
     .section-title { font-size: 1.8rem; }
+    .raw-thanks-text { font-size: 2.2rem; } 
 }
 
 /* Optimized Performance Utility Styles */
