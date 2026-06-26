@@ -395,12 +395,11 @@ const titleText = "@popzzi"; let currentIdx = 0; let isDeleting = false; let typ
 function animateTitleLoop() { if (!isDeleting && currentIdx <= titleText.length) { document.title = titleText.substring(0, currentIdx) || " "; currentIdx++; typingSpeed = 200; } else if (isDeleting && currentIdx >= 0) { document.title = titleText.substring(0, currentIdx) || " "; currentIdx--; typingSpeed = 100; } if (currentIdx > titleText.length) { isDeleting = true; currentIdx = titleText.length; typingSpeed = 2500; } else if (currentIdx < 0) { isDeleting = false; currentIdx = 0; typingSpeed = 800; } setTimeout(animateTitleLoop, typingSpeed); }
 animateTitleLoop();
 
-/* ──── DVD PLAYER PHYSICS ANIMATION (1 STAR ONLY FOR LOW RAM) ──── */
+/* ──── DVD PLAYER PHYSICS ANIMATION (1 STAR) ──── */
 const starContainer = document.getElementById('star-container');
 const neonColors = ['#00f2fe', '#00ff66', '#ff007f', '#ff00ff', '#ffff00', '#00ffff', '#ff3333', '#9d4edd'];
 const activeStars = [];
 if (starContainer) {
-    // තාරකා 5ක් වෙනුවට හරියටම 1 තාරකාවක් විතරක් DVD විදිහට හැදුවා
     const starEl = document.createElement('i'); 
     starEl.className = "fa-solid fa-star orbit-star"; 
     starContainer.appendChild(starEl);
